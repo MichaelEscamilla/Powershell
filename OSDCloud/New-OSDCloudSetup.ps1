@@ -1,3 +1,17 @@
+<#
+.SYNOPSIS
+    Setup the basics of OSDCloud
+
+.DESCRIPTION
+    Install the WinPE Environment pre-reqs before running
+    https://osdcloud.com
+
+.NOTES
+    Author:  Michael Escamilla
+    Website: https://michaeltheadmin.com
+    Twitter: @eskimoruler
+#>
+
 ### Require that the scrip RunAsAdmin
 #Requires -RunAsAdministrator
 
@@ -14,4 +28,7 @@ New-OSDCloudWorkspace
 # Set a Brand Name to Display
 $BrandName = "Michael the Admin"
 # Will use the default wallpaper for now, and include some drivers
-Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -UseDefaultWallpaper -CloudDriver WiFi,HP,USB
+Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -UseDefaultWallpaper -CloudDriver WiFi, HP, USB
+
+### Setup the Hyper-V VM Settings
+Set-OSDCloudVMSettings -CheckpointVM:$true -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
