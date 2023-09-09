@@ -31,4 +31,4 @@ $BrandName = "Michael the Admin"
 Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -UseDefaultWallpaper -CloudDriver WiFi, HP, USB
 
 ### Setup the Hyper-V VM Settings
-Set-OSDCloudVMSettings -CheckpointVM:$true -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
+Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
