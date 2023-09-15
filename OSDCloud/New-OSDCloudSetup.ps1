@@ -17,7 +17,8 @@
 
 ### Setup an OSDCloudTemplate: Include WinRE and the CU for SecureBoot Vulnerability
 $TemplateName = "WinRE-KB5026372"
-New-OSDCloudTemplate -Name $TemplateName -WinRE -CumulativeUpdate C:\_OSDCloud\KB5026372\windows11.0-kb5026372-x64_d2e542ce70571b093d815adb9013ed467a3e0a85.msu
+$KB5023372_File = "C:\_OSDCloud\KB5026372\windows11.0-kb5026372-x64_d2e542ce70571b093d815adb9013ed467a3e0a85.msu"
+New-OSDCloudTemplate -Name $TemplateName -WinRE -CumulativeUpdate $KB5023372_File
 
 ### Create an OSDCloudWorkspace - default is located 'C:\OSDCloud'
 # Just incase, set the template to the one created above
@@ -28,7 +29,7 @@ New-OSDCloudWorkspace
 # Set a Brand Name to Display
 $BrandName = "Michael the Admin"
 # Will use the default wallpaper for now, and include some drivers
-Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -UseDefaultWallpaper -CloudDriver WiFi, HP, USB
+Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -UseDefaultWallpaper -CloudDriver WiFi, USB, HP
 
 ### Setup the Hyper-V VM Settings
 Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
