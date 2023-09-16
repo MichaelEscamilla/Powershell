@@ -23,43 +23,43 @@ $Global:MyOSDCloud = [ordered]@{
     #DriverPackName = "None"
 }
 $Global:OSDCloud_MTA = @{
-    BrandName: "Five11OSD",
-    BrandColor: "Orange",
-    OSActivation: "Volume",
-    OSEdition: "Enterprise",
-    OSLanguage: "en-us",
-    OSImageIndex: 6,
-    OSName: "Windows 11 22H2 x64",
-    OSReleaseID: "22H2",
-    OSVersion: "Windows 11",
-    OSActivationValues: [
-    "Volume"
-    ],
-    OSEditionValues: [
-    Enterprise,
-    Pro
-    ],
-    OSLanguageValues: [
-    "en-us"
-    ],
-    OSNameValues: [
-    "Windows 11 22H2 x64",
-    "Windows 10 22H2 x64"
-    ],
-    OSReleaseIDValues: [
-    "22H2"
-    ],
-    OSVersionValues: [
-    "Windows 11",
-    "Windows 10"
-    ],
-    captureScreenshots: $false,
-    ClearDiskConfirm: $false,
-    restartComputer: $true,
-    updateDiskDrivers: $true,
-    updateFirmware: $false,
-    updateNetworkDrivers: $true,
-    updateSCSIDrivers: $true
+    BrandName            = "Five11OSD"
+    BrandColor           = "Orange"
+    OSActivation         = "Volume"
+    OSEdition            = "Enterprise"
+    OSLanguage           = "en-us"
+    OSImageIndex         = 6
+    OSName               = "Windows 11 22H2 x64"
+    OSReleaseID          = "22H2"
+    OSVersion            = "Windows 11"
+    OSActivationValues   = @(
+        "Volume"
+    )
+    OSEditionValues      = @(
+        "Enterprise",
+        "Pro"
+    )
+    OSLanguageValues     = @(
+        "en-us"
+    )
+    OSNameValues         = @(
+        "Windows 11 22H2 x64",
+        "Windows 10 22H2 x64"
+    )
+    OSReleaseIDValues    = @(
+        "22H2"
+    )
+    OSVersionValues      = @(
+        "Windows 11",
+        "Windows 10"
+    )
+    captureScreenshots   = $false
+    ClearDiskConfirm     = $false
+    restartComputer      = $true
+    updateDiskDrivers    = $true
+    updateFirmware       = $false
+    updateNetworkDrivers = $true
+    updateSCSIDrivers    = $true
 }
       
 
