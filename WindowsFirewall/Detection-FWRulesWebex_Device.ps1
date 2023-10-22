@@ -5,10 +5,10 @@
 #Define a log path (defaults to system, but will be copied to the users own temp after successful execution.)
 $LogPath = join-path -path $($env:SystemRoot) -ChildPath "\TEMP\log_FWRulesWebex_$($MyInvocation.MyCommand).txt"
 
-# Child path of Firewall Rule
-$ProgramPathChild = "AppData\Local\CiscoSparkLauncher\CiscoCollabHost.exe"
+# Program Path for Firewall Rule
+$ProgramPath = "C:\Program Files\Cisco Spark\CiscoCollabHost.exe"
 # Name of the Firewall Rule
-$RuleName = "Webex - CiscoCollabHost.exe"
+$RuleName = "Webex-Device-CiscoCollabHost.exe"
 
 #region Functions
 
@@ -16,13 +16,12 @@ Function Get-LoggedInUserProfiles() {
     # Gets all user profiles
     try {
         # Get All User profiles on Machine
-        $UserProfilesAll = Get-CimInstance win32_userprofile | Select-Object LocalPath, SID
+        $UserProfilesAll = Get-CimInstance win32_userprofile | select LocalPath, SID
+
         # Filter to only Network Accounts and EntraID Accounts
         $UserProfilesAll = $UserProfilesAll | Where-Object { $_.SID -like "S-1-5-21-*" -or $_.SID -like "S-1-12-*" }
         # Filter out Built-In Administrator
         $UserProfilesAll = $UserProfilesAll | Where-Object { $_.SID -notlike "*-500" }
-        # Filter out defaultuser0
-        $UserProfilesAll = $UserProfilesAll | Where-Object { $_.LocalPath -notlike "*defaultuser0" }
     }
     catch [Exception] {
     
@@ -108,13 +107,78 @@ function Get-FWRule {
                 Write-Host "User Rule Missing for: [$($Profile.LocalPath)]"
                 Exit 1
             }
-        }elseif (($RuleFoundCount -gt 1)) {
+        }
+        elseif (($RuleFoundCount -gt 1)) {
             # Create the Rule if running as Remediation
             if (!($Remediate)) {
                 # If Duplicate Rules are found Exit 1 to Trigger Remediate
                 Write-Host "Duplicate Rules found for: [$($Profile.LocalPath)]"
                 Exit 1
             }
+        }
+    }
+}
+
+function Get-FWRuleDevice {
+    param (
+        $ProgramPathDevice,
+        [switch]$Remediate,
+        [switch]$Cleanup
+    )
+
+    # Search for a Rule that matches what we want
+    $RuleFoundCount = 0            
+    # Get existing Firewall rules based on $ProgramPathDevice
+    $ExistingFWRules = $null
+    $ExistingFWRules = Get-NetFirewallApplicationFilter -Program $ProgramPathDevice -ErrorAction SilentlyContinue
+    if ($ExistingFWRules) {
+        foreach ($Rule in $ExistingFWRules) {
+            # Get Rule Details
+            $CurrentRule = $Rule | Get-NetFirewallRule 
+            # Check if the details Match
+            if (($CurrentRule.DisplayName -eq "$($RuleName)")`
+                    -and ($CurrentRule.Direction -eq "Inbound")`
+                    -and ($CurrentRule.Action -eq "Allow")`
+                    -and ($CurrentRule.Profile -eq "Domain, Private, Public")`
+                    -and ((($CurrentRule | Get-NetFirewallPortFilter).Protocol) -eq "Any")
+            ) {
+                # Increment Counter
+                $RuleFoundCount++
+                # Cleanup Duplicate rules if Told
+                if (($RuleFoundCount -gt 1) -and ($Cleanup)) {
+                    Remove-FWRule -FirewallRule $CurrentRule
+                    Write-Information "Removed Duplicate Rule: [$($CurrentRule.DisplayName)] - [$($CurrentRule.Name)]" -InformationAction Continue
+                }
+            }
+            else {
+                # Remove Rules that aren't configured properly
+                if ($Cleanup) {
+                    Remove-FWRule -FirewallRule $CurrentRule
+                    Write-Information "Removed Rule: [$($CurrentRule.DisplayName)] - [$($CurrentRule.Name)]" -InformationAction Continue
+                }    
+            }
+        }
+    }
+        
+    # Check if Matching rules were Found
+    if (($RuleFoundCount -eq 0)) {
+        # Create the Rule if running as Remediation
+        if ($Remediate) {
+            Set-FWRule -ProgramPath "$($ProgramPathUser)"
+            Write-Information "Rule Created" -InformationAction Continue
+        }
+        else {
+            # If a rule is not found Exit 1 to Trigger Remediate
+            Write-Host "Device Rule Missing"
+            Exit 1
+        }
+    }
+    elseif (($RuleFoundCount -gt 1)) {
+        # Create the Rule if running as Remediation
+        if (!($Remediate)) {
+            # If Duplicate Rules are found Exit 1 to Trigger Remediate
+            Write-Host "Duplicate Rules found"
+            Exit 1
         }
     }
 }
@@ -130,7 +194,8 @@ Try {
     
     Write-Information "Checking Firewall Rules for each user profile" -InformationAction Continue
     # Get user profiles and Check for firewall rules, Remediate, Cleanup
-    Get-FWRule -ProfilesObj (Get-LoggedInUserProfiles)
+    #Get-FWRule -ProfilesObj (Get-LoggedInUserProfiles)
+    Get-FWRuleDevice -ProgramPathDevice $ProgramPath
     # If you make it passed above, you're good
     Write-Host "All Firewall Rules Exist"
     Exit 0
