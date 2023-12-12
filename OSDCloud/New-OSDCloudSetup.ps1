@@ -32,6 +32,8 @@ $SavedFile = Save-WebFile -SourceUrl $FileURL -DestinationName $FileName -Destin
 $TemplateName = "WinRE-KB5026372-$($ScriptDate)"
 $KB5023372_File = $SavedFile.FullName
 New-OSDCloudTemplate -Name $TemplateName -WinRE -CumulativeUpdate $KB5023372_File
+New-OSDCloudTemplate -Name $TemplateName -WinRE
+New-OSDCloudTemplate -Name $TemplateName
 
 ### Create an OSDCloudWorkspace - default is located 'C:\OSDCloud'
 # Just incase, set the template to the one created above
@@ -46,11 +48,19 @@ Get-ChildItem "$(Get-OSDCloudWorkspace)\Media\Boot" | Where {$_.PSIsContainer} |
 Get-ChildItem "$(Get-OSDCloudWorkspace)\Media\EFI\Microsoft\Boot" | Where {$_.PSIsContainer} | Where {$_.Name -notin $KeepTheseDirs} | Remove-Item -Recurse -Force
 
 ### Setup OSDCloudWinPE
+# Download Wallpaper
+$SaveLocation = "C:\_OSDCloud\Wallpaper"
+$FileURL = "https://raw.githubusercontent.com/MichaelEscamilla/MichaelTheAdmin/257cbdca6cc130f104d8cf00b91e662ca115a17d/OSD/BootImage/MtA_Wallpaper_1024x768.jpg"
+$FileURL = "https://511azrhostedimages.blob.core.windows.net/intune-511-windows/OSDCloud/511-WindowsPE-DesktopBackground-V2.jpg"
+$FileName = $(($FileURL -split "/")[-1])
+$SavedFile = Save-WebFile -SourceUrl $FileURL -DestinationName $FileName -DestinationDirectory $SaveLocation -Overwrite
+
 # Set a Brand Name to Display
 $BrandName = "Michael the Admin"
 # Will use the default wallpaper for now, and include some drivers
-Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -UseDefaultWallpaper -CloudDriver WiFi, USB, HP
-Edit-OSDCloudWinPE -UseDefaultWallpaper -CloudDriver Wifi, USB, HP -Verbose
+Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -Wallpaper "$($SavedFile.FullName)" -CloudDriver WiFi, USB, HP
+#Edit-OSDCloudWinPE -UseDefaultWallpaper -CloudDriver Wifi, USB, HP -Verbose
 
 ### Setup the Hyper-V VM Settings using the 'Default Switch'
-#Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
+Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
+#Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "VM-Switch" -VHDSizeGB 50
