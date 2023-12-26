@@ -34,16 +34,18 @@ Get-OSDBuilder -Initialize -Verbose
 
 # Mount ISO for Import
 $ISOPath = "D:\_ISO\Windows\SW_DVD9_Win_Pro_11_23H2_64BIT_English_Pro_Ent_EDU_N_MLF_X23-59562.ISO"
+$ISOPath = "D:\_ISO\Windows\SW_DVD9_Win_Server_STD_CORE_2022_2108.27_64Bit_English_DC_STD_MLF_X23-64869.ISO"
 $DiskImage_Mount = Mount-DiskImage -ImagePath $ISOPath
 
 # Import-OSMedia - Should Auto Import the 'Enterprise' index based on our Setting above
-$OSImport = Import-OSMedia -SkipGrid -BuildNetFX
+#$OSImport = Import-OSMedia -SkipGrid -BuildNetFX
+Import-OSMedia -BuildNetFX
 
 # Dismount ISO
 $DiskImage_Mount | Dismount-DiskImage
 
 # Avaialble OSMedia
-$OSMedia = Get-OSMedia -GridView
+#$OSMedia = Get-OSMedia -GridView
 
 <# # Copy WIM to ConfigMgr OS Image Path
 $FileNameOriginal = "install.wim"
