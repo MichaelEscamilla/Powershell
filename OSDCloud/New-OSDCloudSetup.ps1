@@ -59,8 +59,8 @@ $SavedFile = Save-WebFile -SourceUrl $FileURL -DestinationName $FileName -Destin
 # Set a Brand Name to Display
 $BrandName = "Michael the Admin"
 # Will use the default wallpaper for now, and include some drivers
-#Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -Wallpaper "$($SavedFile.FullName)" -CloudDriver WiFi, USB, HP
-Edit-OSDCloudWinPE -UseDefaultWallpaper -CloudDriver Wifi, USB, HP -Verbose
+Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -Wallpaper "$($SavedFile.FullName)" -CloudDriver WiFi, USB, HP
+#Edit-OSDCloudWinPE -UseDefaultWallpaper -CloudDriver Wifi, USB, HP -Verbose
 
 ### Setup the Hyper-V VM Settings using the 'Default Switch'
 #Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
