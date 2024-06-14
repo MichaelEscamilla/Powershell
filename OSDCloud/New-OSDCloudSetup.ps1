@@ -30,7 +30,7 @@ $FileName = $(($FileURL -split "/")[-1])
 
 ### Setup an OSDCloudTemplate: Include WinRE and the CU for SecureBoot Vulnerability
 $TemplateName = "WinRE-KB5026372-$($ScriptDate)"
-$TemplateName = "WinPE_2023-09_$($ScriptDate)"
+$TemplateName = "WinPE_ADK-2023-09_$($ScriptDate)"
 $KB5023372_File = $SavedFile.FullName
 #New-OSDCloudTemplate -Name $TemplateName -WinRE -CumulativeUpdate $KB5023372_File
 #New-OSDCloudTemplate -Name $TemplateName -WinRE
