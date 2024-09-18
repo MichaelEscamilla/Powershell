@@ -1,10 +1,10 @@
 function Build-LabADObjects {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'OUAndDomain')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OUAndDomain')]
         [string]$OUName,
 
-        [Parameter(Mandatory = $false, ParameterSetName = 'OUAndDomain')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'OUAndDomain')]
         [string]$DomainName,
 
         [Parameter(Mandatory = $false)]
@@ -26,6 +26,41 @@ function Build-LabADObjects {
         }
         catch {
             Write-Error "Failed to create Organizational Unit: $_"
+        }
+
+        # Create the Groups
+        try {
+            $groups = @(
+                @{ Name = "CM_Servers"; Description = "Configuration Manager Servers" },
+                @{ Name = "CM_Admins"; Description = "Configuration Manager Admins" },
+                @{ Name = "SQL_Admins"; Description = "SQL Administrators" },
+                @{ Name = "Server_LocalAdmins"; Description = "Server Local Administrators" },
+                @{ Name = "Workstation_LocalAdmins"; Description = "Workstation Local Administrators" },
+                @{ Name = "CM_App_DeployUsers"; Description = "Configuration Manager Application Deployment Users" },
+                @{ Name = "Certificate Admins"; Description = "Certificate Administrators" },
+                @{ Name = "Web Server Cert Enrollment"; Description = "Web Server Certificate Enrollment" }
+            )
+
+            foreach ($group in $groups) {
+                $groupName = $group.Name
+                $groupDescription = $group.Description
+
+                # Check if the group already exists using the SamAccountName
+                $existingGroup = Get-ADGroup -Filter { SamAccountName -eq $groupName } -ErrorAction SilentlyContinue
+
+                if ($existingGroup) {
+                    # Update the description if the group exists
+                    Set-ADGroup -Identity $existingGroup -Description $groupDescription -ErrorAction Stop
+                    Write-Output "Group '$groupName' already exists. Updating Information"
+                }
+                else {
+                    New-ADGroup -Name $groupName -GroupCategory Security -GroupScope Global -Path $OUName -Description $groupDescription -ErrorAction Stop
+                    Write-Output "Group '$groupName' with description '$groupDescription' created successfully in Organizational Unit '$OUName'."
+                }
+            }
+        }
+        catch {
+            Write-Error "Failed to create Groups: $_"
         }
 
         # Create the Users Accounts
