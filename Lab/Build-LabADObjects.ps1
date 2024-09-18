@@ -100,7 +100,7 @@ function Build-LabADObjects {
                         $userPassword = [System.Web.Security.Membership]::GeneratePassword(12, 2) | ConvertTo-SecureString -AsPlainText -Force
                     }
 
-                    New-ADUser -Name $userName -GivenName $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUName -Enabled $true -Description $userDescription -ErrorAction Stop
+                    New-ADUser -Name $userName -GivenName $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUPath -Enabled $true -Description $userDescription -ErrorAction Stop
                     Write-Output "User account '$userName' with description '$userDescription' created successfully in Organizational Unit '$OUName'."
                 }
             }
