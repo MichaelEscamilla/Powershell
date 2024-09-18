@@ -14,7 +14,7 @@ function Build-LabADObjects {
     process {
         # Create the Organizational Unit
         try {
-            $existingOU = Get-ADOrganizationalUnit -Filter { Name -eq "$($OUName)" } -ErrorAction SilentlyContinue
+            $existingOU = Get-ADOrganizationalUnit -Filter { Name -eq $OUName } -ErrorAction SilentlyContinue
 
             if ($existingOU) {
                 $OUPath = $existingOU.DistinguishedName
