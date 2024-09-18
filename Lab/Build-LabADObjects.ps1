@@ -1,10 +1,10 @@
 function Build-LabADObjects {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [string]$OUName = "OU=MTA,DC=dev,DC=michaeltheadmin,DC=com",
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [string]$DomainName = "dev.michaeltheadmin.com",
 
         [Parameter(Mandatory = $false)]
