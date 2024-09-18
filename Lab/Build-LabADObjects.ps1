@@ -14,15 +14,19 @@ function Build-LabADObjects {
     process {
         # Create the Organizational Unit
         try {
-            $existingOU = Get-ADOrganizationalUnit -Filter { Name -eq $OUName } -ErrorAction SilentlyContinue
+            $existingOU = Get-ADOrganizationalUnit -Filter { Name -eq "$($OUName)" } -ErrorAction SilentlyContinue
 
             if ($existingOU) {
-            Write-Output "Organizational Unit '$OUName' already exists in domain '$DomainName'."
+                $OUPath = $existingOU.DistinguishedName
+                Write-Output "Organizational Unit '$OUName' already exists in domain '$DomainName'."
             }
             else {
-            New-ADOrganizationalUnit -Name $OUName -Path "DC=$($DomainName -replace '\.', ',DC=')" -ErrorAction Stop
-            Write-Output "Organizational Unit '$OUName' created successfully in domain '$DomainName'."
+                New-ADOrganizationalUnit -Name $OUName -Path "DC=$($DomainName -replace '\.', ',DC=')" -ErrorAction Stop
+                Write-Output "Organizational Unit '$OUName' created successfully in domain '$DomainName'."
             }
+
+            # OU Path
+            $OUPath = "OU=$($OUName),DC=$($DomainName -replace '\.', ',DC=')"
         }
         catch {
             Write-Error "Failed to create Organizational Unit: $_"
@@ -54,7 +58,6 @@ function Build-LabADObjects {
                     Write-Output "Group '$groupName' already exists. Updating Information"
                 }
                 else {
-                    $OUPath = "OU=$OUName" + "DC=$($DomainName -replace '\.', ',DC=')"
                     New-ADGroup -Name $groupName -SamAccountName $groupName -DisplayName $groupName -GroupCategory Security -GroupScope Global -Path "$($OUPath)" -Description $groupDescription -ErrorAction Stop
                     Write-Output "Group '$groupName' with description '$groupDescription' created successfully in Organizational Unit '$OUName'."
                 }
