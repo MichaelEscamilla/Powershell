@@ -15,7 +15,7 @@ function Build-LabADObjects {
         # Create the Organizational Unit
         try {
             $ouPath = "OU=$OUName,DC=$($DomainName -replace '\.', ',DC=')"
-            New-ADOrganizationalUnit -Name $OUName -Path "DC=$($DomainName -replace '\.', ',DC=')" -ErrorAction Stop
+            #New-ADOrganizationalUnit -Name $OUName -Path "DC=$($DomainName -replace '\.', ',DC=')" -ErrorAction Stop
         }
         catch {
             Write-Error "Failed to create Organizational Unit: $_"
@@ -34,7 +34,7 @@ function Build-LabADObjects {
                     $userPassword = [System.Web.Security.Membership]::GeneratePassword(12, 2) | ConvertTo-SecureString -AsPlainText -Force
                 }
                 $userPrincipalName = "$userName@$DomainName"
-                New-ADUser -Name $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $ouPath -Enabled $true -ErrorAction Stop
+                New-ADUser -Name $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUName -Enabled $true -ErrorAction Stop
                 Write-Output "User account '$userName' created successfully in Organizational Unit '$OUName'."
 
             }
