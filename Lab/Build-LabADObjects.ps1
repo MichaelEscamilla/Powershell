@@ -1,11 +1,11 @@
 function Build-LabADObjects {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false)]
-        [string]$OUName = "OU=MTA,DC=dev,DC=michaeltheadmin,DC=com",
+        [Parameter(Mandatory = $false, ParameterSetName = 'OUAndDomain')]
+        [string]$OUName,
 
-        [Parameter(Mandatory = $false)]
-        [string]$DomainName = "dev.michaeltheadmin.com",
+        [Parameter(Mandatory = $false, ParameterSetName = 'OUAndDomain')]
+        [string]$DomainName,
 
         [Parameter(Mandatory = $false)]
         [string]$DefaultPassword
@@ -14,13 +14,19 @@ function Build-LabADObjects {
     process {
         # Create the Organizational Unit
         try {
-            $ouPath = "OU=$OUName,DC=$($DomainName -replace '\.', ',DC=')"
-            #New-ADOrganizationalUnit -Name $OUName -Path "DC=$($DomainName -replace '\.', ',DC=')" -ErrorAction Stop
+            $existingOU = Get-ADOrganizationalUnit -Filter { Name -eq $OUName } -ErrorAction SilentlyContinue
+
+            if ($existingOU) {
+            Write-Output "Organizational Unit '$OUName' already exists in domain '$DomainName'."
+            }
+            else {
+            New-ADOrganizationalUnit -Name $OUName -Path "DC=$($DomainName -replace '\.', ',DC=')" -ErrorAction Stop
+            Write-Output "Organizational Unit '$OUName' created successfully in domain '$DomainName'."
+            }
         }
         catch {
             Write-Error "Failed to create Organizational Unit: $_"
         }
-        Write-Output "Organizational Unit '$OUName' created successfully in domain '$DomainName'."
 
         # Create the Users Accounts
         try {
@@ -43,7 +49,7 @@ function Build-LabADObjects {
                 if ($existingUser) {
                     # Update the description if the user exists
                     Set-ADUser -Identity $existingUser -GivenName $userName -Description $userDescription -ErrorAction Stop
-                    Write-Output "User account '$userName' already exists. Description updated to '$userDescription'."
+                    Write-Output "User account '$userName' already exists. Updating Information"
                 }
                 else {
                     # Use the provided UserPassword if available, otherwise randomly generate a password
