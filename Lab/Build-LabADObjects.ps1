@@ -42,7 +42,7 @@ function Build-LabADObjects {
 
                 if ($existingUser) {
                     # Update the description if the user exists
-                    Set-ADUser -Identity $existingUser -Description $userDescription -ErrorAction Stop
+                    Set-ADUser -Identity $existingUser -GivenName $userName -Description $userDescription -ErrorAction Stop
                     Write-Output "User account '$userName' already exists. Description updated to '$userDescription'."
                 }
                 else {
@@ -54,7 +54,7 @@ function Build-LabADObjects {
                         $userPassword = [System.Web.Security.Membership]::GeneratePassword(12, 2) | ConvertTo-SecureString -AsPlainText -Force
                     }
 
-                    New-ADUser -Name $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUName -Enabled $true -Description $userDescription -ErrorAction Stop
+                    New-ADUser -Name $userName -GivenName $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUName -Enabled $true -Description $userDescription -ErrorAction Stop
                     Write-Output "User account '$userName' with description '$userDescription' created successfully in Organizational Unit '$OUName'."
                 }
             }
