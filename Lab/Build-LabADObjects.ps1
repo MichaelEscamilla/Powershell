@@ -46,7 +46,7 @@ function Build-LabADObjects {
                 $groupDescription = $group.Description
 
                 # Check if the group already exists using the SamAccountName
-                $existingGroup = Get-ADGroup -Filter { SamAccountName -eq $groupName } -ErrorAction SilentlyContinue
+                $existingGroup = Get-ADGroup -Identity $groupName -ErrorAction SilentlyContinue
 
                 if ($existingGroup) {
                     # Update the description if the group exists
