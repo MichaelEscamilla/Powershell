@@ -35,17 +35,28 @@ function Build-LabADObjects {
             foreach ($user in $users) {
                 $userName = $user.Name
                 $userDescription = $user.Description
+                $userPrincipalName = "$userName@$DomainName"
 
-                # Use the provided UserPassword if available, otherwise randomly generate a password
-                if ($DefaultPassword) {
-                    $userPassword = ConvertTo-SecureString $DefaultPassword -AsPlainText -Force
+                # Check if the user already exists using the SamAccountName
+                $existingUser = Get-ADUser -Filter { SamAccountName -eq $userName } -ErrorAction SilentlyContinue
+
+                if ($existingUser) {
+                    # Update the description if the user exists
+                    Set-ADUser -Identity $existingUser -Description $userDescription -ErrorAction Stop
+                    Write-Output "User account '$userName' already exists. Description updated to '$userDescription'."
                 }
                 else {
-                    $userPassword = [System.Web.Security.Membership]::GeneratePassword(12, 2) | ConvertTo-SecureString -AsPlainText -Force
+                    # Use the provided UserPassword if available, otherwise randomly generate a password
+                    if ($DefaultPassword) {
+                        $userPassword = ConvertTo-SecureString $DefaultPassword -AsPlainText -Force
+                    }
+                    else {
+                        $userPassword = [System.Web.Security.Membership]::GeneratePassword(12, 2) | ConvertTo-SecureString -AsPlainText -Force
+                    }
+
+                    New-ADUser -Name $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUName -Enabled $true -Description $userDescription -ErrorAction Stop
+                    Write-Output "User account '$userName' with description '$userDescription' created successfully in Organizational Unit '$OUName'."
                 }
-                $userPrincipalName = "$userName@$DomainName"
-                New-ADUser -Name $userName -AccountPassword $userPassword -UserPrincipalName $userPrincipalName -Path $OUName -Enabled $true -Description $userDescription -ErrorAction Stop
-                Write-Output "User account '$userName' with description '$userDescription' created successfully in Organizational Unit '$OUName'."
             }
         }
         catch {
