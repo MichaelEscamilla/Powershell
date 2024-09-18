@@ -54,7 +54,7 @@ function Build-LabADObjects {
                     Write-Output "Group '$groupName' already exists. Updating Information"
                 }
                 else {
-                    New-ADGroup -Name $groupName -GroupCategory Security -GroupScope Global -Path $OUName -Description $groupDescription -ErrorAction Stop
+                    New-ADGroup -Name $groupName -SamAccountName $groupName -DisplayName $groupName -GroupCategory Security -GroupScope Global -Path $OUName -Description $groupDescription -ErrorAction Stop
                     Write-Output "Group '$groupName' with description '$groupDescription' created successfully in Organizational Unit '$OUName'."
                 }
             }
