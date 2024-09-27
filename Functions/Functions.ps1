@@ -19,4 +19,4 @@ powershell iex (irm functions.osdcloud.com)
 param ()
 
 # Load Functions
-Invoke-Expression (Invoke-RestMethod -Uri 'https://github.com/MichaelEscamilla/Powershell/raw/refs/heads/main/Functions/Get-PatchTuesday.ps1')
+Invoke-Expression (Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/Functions/Get-PatchTuesday.ps1')
