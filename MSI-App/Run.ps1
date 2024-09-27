@@ -5,10 +5,172 @@ function Show-MSI_psf {
 	Add-Type -AssemblyName System.Windows.Forms
 
 	# Import XAML
-	[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
+	#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
 
-	# Remove some stuff
-
+	#Build the GUI
+	[xml]$XAMLformMSIProperties = @"
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    Name="formMSIProperties"
+    MinWidth="800"
+    MaxWidth="800"
+    MinHeight="300"
+    MaxHeight="300"
+    Title="MSI Properties">
+    <Grid>
+        <Label
+            Name="lbl_Name"
+            Margin="13,14,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AllowDrop="False"
+            IsEnabled="True"
+            TabIndex="7"
+            Content="Product Name" />
+        <Label
+            Name="lbl_Manufacturer"
+            Margin="13,46,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AllowDrop="False"
+            IsEnabled="True"
+            TabIndex="8"
+            Content="Manufacturer" />
+        <Label
+            Name="lbl_Version"
+            Margin="13,78,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AllowDrop="False"
+            IsEnabled="True"
+            TabIndex="9"
+            Content="Product Version" />
+        <Label
+            Name="lbl_ProductCode"
+            Margin="13,110,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AllowDrop="False"
+            IsEnabled="True"
+            TabIndex="10"
+            Content="Product Code" />
+        <ListBox
+            Name="lsbox_File"
+            Margin="13,154,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AllowDrop="True"
+            IsEnabled="True"
+            MinHeight="70"
+            MinWidth="749"
+            TabIndex="0"></ListBox >
+        <TextBox
+            Name="txt_Name"
+            Margin="141,13,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AcceptsReturn="False"
+            AcceptsTab="False"
+            AllowDrop="False"
+            IsEnabled="True"
+            IsReadOnly="True"
+            MaxLength="32767"
+            MinHeight="41"
+            MinWidth="550"
+            TabIndex="3"
+            xml:space="preserve"/>
+        <TextBox
+                Name="txt_Manufacturer"
+                Margin="141,45,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AcceptsReturn="False"
+                AcceptsTab="False"
+                AllowDrop="False"
+                IsEnabled="True"
+                IsReadOnly="True"
+                MaxLength="32767"
+                MinHeight="41"
+                MinWidth="550"
+                TabIndex="4"
+                xml:space="preserve"/>
+        <TextBox
+                Name="txt_Version"
+                Margin="141,77,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AcceptsReturn="False"
+                AcceptsTab="False"
+                AllowDrop="False"
+                IsEnabled="True"
+                IsReadOnly="True"
+                MaxLength="32767"
+                MinHeight="41"
+                MinWidth="550"
+                TabIndex="6"
+                xml:space="preserve"/>
+        <TextBox
+                Name="txt_Code"
+                Margin="141,109,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AcceptsReturn="False"
+                AcceptsTab="False"
+                AllowDrop="False"
+                IsEnabled="True"
+                IsReadOnly="True"
+                MaxLength="32767"
+                MinHeight="41"
+                MinWidth="550"
+                TabIndex="5"
+                xml:space="preserve"/>
+        <Button
+                Name="btn_Name_Copy"
+                Margin="0,13,13,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="11"
+                Content="Copy" />
+        <Button
+                Name="btn_Man_Copy"
+                Margin="0,45,13,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="12"
+                Content="Copy" />
+        <Button
+                Name="btn_Version_Copy"
+                Margin="0,77,13,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="13"
+                Content="Copy" />
+        <Button
+                Name="btn_Code_Copy"
+                Margin="0,109,13,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="14"
+                Content="Copy" />
+  </Grid>
+</Window>
+"@
 
 	# Create a new XML node reader for reading the XAML content
 	$readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIProperties
@@ -112,7 +274,6 @@ function Show-MSI_psf {
 				$lsbox_File.Items.Clear()
 				$lsbox_File.Items.Add($filename[0])
 			}
-			Write-host "FileDrop: [$($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))]"
 		}
 	)
 
@@ -135,9 +296,27 @@ function Show-MSI_psf {
 		}
 	)
 
+	$btn_Name_Copy.add_Click(
+		{
+			[System.Windows.Forms.Clipboard]::SetText($txt_Name.Text)
+		}
+	)
+
 	$btn_Man_Copy.add_Click(
 		{
 			[System.Windows.Forms.Clipboard]::SetText($txt_Manufacturer.Text)
+		}
+	)
+
+	$btn_Version_Copy.add_Click(
+		{
+			[System.Windows.Forms.Clipboard]::SetText($txt_Version.Text)
+		}
+	)
+
+	$btn_Code_Copy.add_Click(
+		{
+			[System.Windows.Forms.Clipboard]::SetText($txt_Code.Text)
 		}
 	)
 
