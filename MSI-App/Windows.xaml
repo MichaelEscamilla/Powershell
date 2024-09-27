@@ -12,9 +12,8 @@
             VerticalAlignment="Top"
             AllowDrop="False"
             IsEnabled="True"
-            TabIndex="7">
-            Product Name
-        </Label>
+            TabIndex="7"
+            Content="Product Name" />
         <Label
             Name="lbl_Manufacturer"
             Margin="13,46,0,0"
@@ -22,9 +21,8 @@
             VerticalAlignment="Top"
             AllowDrop="False"
             IsEnabled="True"
-            TabIndex="8">
-            Manufacturer
-        </Label>
+            TabIndex="8"
+            Content="Manufacturer" />
         <Label
             Name="lbl_Version"
             Margin="13,78,0,0"
@@ -32,9 +30,8 @@
             VerticalAlignment="Top"
             AllowDrop="False"
             IsEnabled="True"
-            TabIndex="9">
-            Product Version
-        </Label>
+            TabIndex="9"
+            Content="Product Version" />
         <Label
             Name="lbl_ProductCode"
             Margin="13,110,0,0"
@@ -42,9 +39,8 @@
             VerticalAlignment="Top"
             AllowDrop="False"
             IsEnabled="True"
-            TabIndex="10">
-            Product Code
-        </Label>
+            TabIndex="10"
+            Content="Product Code" />
         <ListBox
             Name="lsbox_File"
             Margin="13,154,0,0"
@@ -54,7 +50,7 @@
             IsEnabled="True"
             MinHeight="70"
             MinWidth="749"
-            TabIndex="0"/>
+            TabIndex="0"></ListBox >
         <TextBox
             Name="txt_Name"
             Margin="141,13,0,0"
@@ -70,98 +66,94 @@
             MinWidth="550"
             TabIndex="3"
             xml:space="preserve"/>
-    <TextBox
-            Name="txt_Manufacturer"
-            Margin="141,45,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AcceptsReturn="False"
-            AcceptsTab="False"
-            AllowDrop="False"
-            IsEnabled="True"
-            IsReadOnly="True"
-            MaxLength="32767"
-            MinHeight="41"
-            MinWidth="550"
-            TabIndex="4"
-            xml:space="preserve"/>
-    <TextBox
-            Name="txt_Version"
-            Margin="141,77,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AcceptsReturn="False"
-            AcceptsTab="False"
-            AllowDrop="False"
-            IsEnabled="True"
-            IsReadOnly="True"
-            MaxLength="32767"
-            MinHeight="41"
-            MinWidth="550"
-            TabIndex="6"
-            xml:space="preserve"/>
-    <TextBox
-            Name="txt_Code"
-            Margin="141,109,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AcceptsReturn="False"
-            AcceptsTab="False"
-            AllowDrop="False"
-            IsEnabled="True"
-            IsReadOnly="True"
-            MaxLength="32767"
-            MinHeight="41"
-            MinWidth="550"
-            TabIndex="5"
-            xml:space="preserve"/>
-    <Button
-            Name="btn_Name_Copy"
-            Margin="699,13,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            MinHeight="24"
-            MinWidth="60"
-            TabIndex="11">
-      Copy
-    </Button>
-    <Button
-            Name="btn_Man_Copy"
-            Margin="699,45,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            MinHeight="24"
-            MinWidth="60"
-            TabIndex="12">
-      Copy
-    </Button>
-    <Button
-            Name="btn_Version_Copy"
-            Margin="699,77,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            MinHeight="24"
-            MinWidth="60"
-            TabIndex="13">
-      Copy
-    </Button>
-    <Button
-            Name="btn_Code_Copy"
-            Margin="699,109,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            MinHeight="24"
-            MinWidth="60"
-            TabIndex="14">
-      Copy
-    </Button>
+        <TextBox
+                Name="txt_Manufacturer"
+                Margin="141,45,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AcceptsReturn="False"
+                AcceptsTab="False"
+                AllowDrop="False"
+                IsEnabled="True"
+                IsReadOnly="True"
+                MaxLength="32767"
+                MinHeight="41"
+                MinWidth="550"
+                TabIndex="4"
+                xml:space="preserve"/>
+        <TextBox
+                Name="txt_Version"
+                Margin="141,77,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AcceptsReturn="False"
+                AcceptsTab="False"
+                AllowDrop="False"
+                IsEnabled="True"
+                IsReadOnly="True"
+                MaxLength="32767"
+                MinHeight="41"
+                MinWidth="550"
+                TabIndex="6"
+                xml:space="preserve"/>
+        <TextBox
+                Name="txt_Code"
+                Margin="141,109,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AcceptsReturn="False"
+                AcceptsTab="False"
+                AllowDrop="False"
+                IsEnabled="True"
+                IsReadOnly="True"
+                MaxLength="32767"
+                MinHeight="41"
+                MinWidth="550"
+                TabIndex="5"
+                xml:space="preserve"/>
+        <Button
+                Name="btn_Name_Copy"
+                Margin="699,13,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="11"
+                Content="Copy" />
+        <Button
+                Name="btn_Man_Copy"
+                Margin="699,45,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="12"
+                Content="Copy" />
+        <Button
+                Name="btn_Version_Copy"
+                Margin="699,77,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="13"
+                Content="Copy" />
+        <Button
+                Name="btn_Code_Copy"
+                Margin="699,109,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                AllowDrop="False"
+                IsEnabled="True"
+                MinHeight="24"
+                MinWidth="60"
+                TabIndex="14"
+                Content="Copy" />
   </Grid>
 </Window>

@@ -2,97 +2,27 @@
 function Show-MSI_psf {
 	# Load Assemblies
 	Add-Type -AssemblyName PresentationFramework
-	Add-Type -AssemblyName WindowsBase
-	Add-Type -AssemblyName System.Xml
-	Add-Type -AssemblyName System.Drawing
 	Add-Type -AssemblyName System.Windows.Forms
-	Add-Type -AssemblyName WindowsFormsIntegration
 
 	# Import XAML
 	[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
 
+	# Remove some stuff
+
+
 	# Create a new XML node reader for reading the XAML content
 	$readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIProperties
 
+	
 	# Load the XAML content into a WPF window object using the XAML reader
-	[System.Windows.Window]$formMSIProperties = [Windows.Markup.XamlReader]::Load($readerformMSIProperties)
+	#[System.Windows.Window]$formMSIProperties = [Windows.Markup.XamlReader]::Load($readerformMSIProperties)
+	$formMSIProperties = [Windows.Markup.XamlReader]::Load($readerformMSIProperties)
 
 	# This script selects all XML nodes with a "Name" attribute from the $XAMLformMSIProperties object.
 	# For each selected node, it creates a PowerShell variable with the same name as the node's "Name" attribute.
 	# The value of the created variable is set to the result of the FindName method called on the $formMSIProperties object, using the node's "Name" attribute as the parameter.
 	$XAMLformMSIProperties.SelectNodes("//*[@Name]") | ForEach-Object { Set-Variable -Name ($_.Name) -Value $formMSIProperties.FindName($_.Name) -Scope Global }
 
-	function Update-ListBox {
-		<#
-		.SYNOPSIS
-			This functions helps you load items into a ListBox or CheckedListBox.
-		
-		.DESCRIPTION
-			Use this function to dynamically load items into the ListBox control.
-		
-		.PARAMETER ListBox
-			The ListBox control you want to add items to.
-		
-		.PARAMETER Items
-			The object or objects you wish to load into the ListBox's Items collection.
-		
-		.PARAMETER DisplayMember
-			Indicates the property to display for the items in this control.
-		
-		.PARAMETER Append
-			Adds the item(s) to the ListBox without clearing the Items collection.
-		
-		.EXAMPLE
-			Update-ListBox $ListBox1 "Red", "White", "Blue"
-		
-		.EXAMPLE
-			Update-ListBox $listBox1 "Red" -Append
-			Update-ListBox $listBox1 "White" -Append
-			Update-ListBox $listBox1 "Blue" -Append
-		
-		.EXAMPLE
-			Update-ListBox $listBox1 (Get-Process) "ProcessName"
-		
-		.NOTES
-			Additional information about the function.
-	#>
-		
-		param
-		(
-			[Parameter(Mandatory = $true)]
-			[ValidateNotNull()]
-			[System.Windows.Forms.ListBox]
-			$ListBox,
-			[Parameter(Mandatory = $true)]
-			[ValidateNotNull()]
-			$Items,
-			[Parameter(Mandatory = $false)]
-			[string]
-			$DisplayMember,
-			[switch]
-			$Append
-		)
-		
-		if (-not $Append) {
-			$listBox.Items.Clear()
-		}
-		
-		if ($Items -is [System.Windows.Forms.ListBox+ObjectCollection] -or $Items -is [System.Collections.ICollection]) {
-			$listBox.Items.AddRange($Items)
-		}
-		elseif ($Items -is [System.Collections.IEnumerable]) {
-			$listBox.BeginUpdate()
-			foreach ($obj in $Items) {
-				$listBox.Items.Add($obj)
-			}
-			$listBox.EndUpdate()
-		}
-		else {
-			$listBox.Items.Add($Items)
-		}
-		
-		$listBox.DisplayMember = $DisplayMember
-	}
 	function Get-MsiDatabaseProperties {
 		<#
 	    .SYNOPSIS
@@ -172,8 +102,6 @@ function Show-MSI_psf {
 
 	$lsbox_File.Add_Drop(
 		{
-			#Event Argument: $_ = [System.Windows.Forms.DragEventArgs]
-			#TODO: Place custom script here
 			$filename = $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)
 			if ($filename) {
 				$FileInfo = Get-MsiDatabaseProperties -FilePath $filename
@@ -181,22 +109,28 @@ function Show-MSI_psf {
 				$txt_Manufacturer.Text = $FileInfo.Manufacturer
 				$txt_Version.Text = $FileInfo.ProductVersion
 				$txt_Code.Text = $FileInfo.ProductCode
-				Update-ListBox $lsbox_File $filename[0]
+				$lsbox_File.Items.Clear()
+				$lsbox_File.Items.Add($filename[0])
 			}
+			Write-host "FileDrop: [$($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))]"
 		}
 	)
 
 	$lsbox_File.Add_DragOver(
 		{
+			# Check if the dragged data contains file drop data
 			if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
-				$filename = $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)
-				$fileExt = (Get-Item $filename).Extension
-				if ($fileExt -eq ".msi") {
-					$_.Effect = [System.Windows.DragDropEffects]::Copy
+				foreach ($File in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) {
+					# Check if the file is an MSI file
+					if ((Get-Item $File).Extension -eq ".msi") {
+						# Set the drag effect to Copy if the file is an MSI file
+						$_.Effects = [System.Windows.DragDropEffects]::Copy
+					}
+					else {
+						# Set the drag effect to None if the file is not an MSI file
+						$_.Effects = [System.Windows.DragDropEffects]::None
+					}
 				}
-			}
-			else {
-				$_.Effect = [System.Windows.DragDropEffects]::None
 			}
 		}
 	)
