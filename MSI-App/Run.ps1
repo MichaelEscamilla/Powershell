@@ -448,6 +448,8 @@ function Show-MSI_psf {
 		{
 			# Check if the dragged data contains file drop data
 			if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
+        Write-Host "FileDrop: [$([Windows.Forms.DataFormats]::FileDrop)]"
+        Write-Host "File Extension: [$([System.IO.Path]::GetExtension([Windows.Forms.DataFormats]::FileDrop)))]"
 				foreach ($File in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) {
 					# Check if the file is an MSI file
 					#Write-Host "Extension: $([System.IO.Path]::GetExtension($File))"
