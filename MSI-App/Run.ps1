@@ -6,170 +6,271 @@ function Show-MSI_psf {
 
 	# Import XAML
 	#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
+	#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
 
 	#Build the GUI
 	[xml]$XAMLformMSIProperties = @"
 <Window
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    Name="formMSIProperties"
-    MinWidth="800"
-    MaxWidth="800"
-    MinHeight="300"
-    MaxHeight="300"
-    Title="MSI Properties">
-    <Grid>
-        <Label
-            Name="lbl_Name"
-            Margin="13,14,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            TabIndex="7"
-            Content="Product Name" />
-        <Label
-            Name="lbl_Manufacturer"
-            Margin="13,46,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            TabIndex="8"
-            Content="Manufacturer" />
-        <Label
-            Name="lbl_Version"
-            Margin="13,78,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            TabIndex="9"
-            Content="Product Version" />
-        <Label
-            Name="lbl_ProductCode"
-            Margin="13,110,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            IsEnabled="True"
-            TabIndex="10"
-            Content="Product Code" />
-        <ListBox
-            Name="lsbox_File"
-            Margin="13,154,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AllowDrop="True"
-            IsEnabled="True"
-            MinHeight="70"
-            MinWidth="749"
-            TabIndex="0"></ListBox >
-        <TextBox
-            Name="txt_Name"
-            Margin="141,13,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            AcceptsReturn="False"
-            AcceptsTab="False"
-            AllowDrop="False"
-            IsEnabled="True"
-            IsReadOnly="True"
-            MaxLength="32767"
-            MinHeight="41"
-            MinWidth="550"
-            TabIndex="3"
-            xml:space="preserve"/>
-        <TextBox
-                Name="txt_Manufacturer"
-                Margin="141,45,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                AcceptsReturn="False"
-                AcceptsTab="False"
-                AllowDrop="False"
-                IsEnabled="True"
-                IsReadOnly="True"
-                MaxLength="32767"
-                MinHeight="41"
-                MinWidth="550"
-                TabIndex="4"
-                xml:space="preserve"/>
-        <TextBox
-                Name="txt_Version"
-                Margin="141,77,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                AcceptsReturn="False"
-                AcceptsTab="False"
-                AllowDrop="False"
-                IsEnabled="True"
-                IsReadOnly="True"
-                MaxLength="32767"
-                MinHeight="41"
-                MinWidth="550"
-                TabIndex="6"
-                xml:space="preserve"/>
-        <TextBox
-                Name="txt_Code"
-                Margin="141,109,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                AcceptsReturn="False"
-                AcceptsTab="False"
-                AllowDrop="False"
-                IsEnabled="True"
-                IsReadOnly="True"
-                MaxLength="32767"
-                MinHeight="41"
-                MinWidth="550"
-                TabIndex="5"
-                xml:space="preserve"/>
-        <Button
-                Name="btn_Name_Copy"
-                Margin="0,13,13,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                AllowDrop="False"
-                IsEnabled="True"
-                MinHeight="24"
-                MinWidth="60"
-                TabIndex="11"
-                Content="Copy" />
-        <Button
-                Name="btn_Man_Copy"
-                Margin="0,45,13,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                AllowDrop="False"
-                IsEnabled="True"
-                MinHeight="24"
-                MinWidth="60"
-                TabIndex="12"
-                Content="Copy" />
-        <Button
-                Name="btn_Version_Copy"
-                Margin="0,77,13,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                AllowDrop="False"
-                IsEnabled="True"
-                MinHeight="24"
-                MinWidth="60"
-                TabIndex="13"
-                Content="Copy" />
-        <Button
-                Name="btn_Code_Copy"
-                Margin="0,109,13,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                AllowDrop="False"
-                IsEnabled="True"
-                MinHeight="24"
-                MinWidth="60"
-                TabIndex="14"
-                Content="Copy" />
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  Name="form1"
+  MinWidth="900"
+  MaxWidth="900"
+  MinHeight="300"
+  MaxHeight="300"
+  Title="MSI Properties"
+  FontSize="15">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="0.15*" />
+    </Grid.ColumnDefinitions>
+
+    <Label
+      Grid.Row="0"
+      Grid.Column="0"
+      Name="lbl_ProductName"
+      Margin="5"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      AllowDrop="False"
+      IsEnabled="True">
+      Product Name
+    </Label>
+    <TextBox
+      Grid.Row="0"
+      Grid.Column="1"
+      Name="txt_ProductName"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      VerticalContentAlignment="Center"
+      AcceptsReturn="False"
+      AcceptsTab="False"
+      AllowDrop="False"
+      IsEnabled="True"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsReadOnly="True"
+      xml:space="preserve" />
+    <Button
+      Grid.Row="0"
+      Grid.Column="2"
+      Name="btn_ProductName_Copy"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Content="Copy"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsEnabled="False" />
+
+    <Label
+      Grid.Row="1"
+      Grid.Column="0"
+      Name="lbl_Manufacturer"
+      Margin="5"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      AllowDrop="False"
+      IsEnabled="True">
+      Manufacturer
+    </Label>
+    <TextBox
+      Grid.Row="1"
+      Grid.Column="1"
+      Name="txt_Manufacture"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      VerticalContentAlignment="Center"
+      AcceptsReturn="False"
+      AcceptsTab="False"
+      AllowDrop="False"
+      IsEnabled="True"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsReadOnly="True"
+      xml:space="preserve" />
+    <Button
+      Grid.Row="1"
+      Grid.Column="2"
+      Name="btn_Manufacture_Copy"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Content="Copy"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsEnabled="False" />
+
+    <Label
+      Grid.Row="2"
+      Grid.Column="0"
+      Name="lbl_ProductVersion"
+      Margin="5"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      AllowDrop="False"
+      IsEnabled="True">
+      Product Version
+    </Label>
+    <TextBox
+      Grid.Row="2"
+      Grid.Column="1"
+      Name="txt_ProductVersion"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      VerticalContentAlignment="Center"
+      AcceptsReturn="False"
+      AcceptsTab="False"
+      AllowDrop="False"
+      IsEnabled="True"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsReadOnly="True"
+      xml:space="preserve" />
+    <Button
+      Grid.Row="2"
+      Grid.Column="2"
+      Name="btn_ProductVersion_Copy"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Content="Copy"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsEnabled="False" />
+
+    <Label
+      Grid.Row="3"
+      Grid.Column="0"
+      Name="lbl_ProductCode"
+      Margin="5"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      AllowDrop="False"
+      IsEnabled="True">
+      Product Code
+    </Label>
+    <TextBox
+      Grid.Row="3"
+      Grid.Column="1"
+      Name="txt_ProductCode"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      VerticalContentAlignment="Center"
+      AcceptsReturn="False"
+      AcceptsTab="False"
+      AllowDrop="False"
+      IsEnabled="True"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsReadOnly="True"
+      xml:space="preserve" />
+    <Button
+      Grid.Row="3"
+      Grid.Column="2"
+      Name="btn_ProductCode_Copy"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Content="Copy"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsEnabled="False" />
+
+    <Label
+      Grid.Row="4"
+      Grid.Column="0"
+      Name="lbl_UpgradeCode"
+      Margin="5"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      AllowDrop="False"
+      IsEnabled="True">
+      Upgrade Code
+    </Label>
+    <TextBox
+      Grid.Row="4"
+      Grid.Column="1"
+      Name="txt_UpgradeCode"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      VerticalContentAlignment="Center"
+      AcceptsReturn="False"
+      AcceptsTab="False"
+      AllowDrop="False"
+      IsEnabled="True"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsReadOnly="True"
+      xml:space="preserve" />
+    <Button
+      Grid.Row="4"
+      Grid.Column="3"
+      Name="btn_UpgradeCode_Copy"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Content="Copy"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsEnabled="False" />
+
+    <Button
+      Grid.Row="5"
+      Grid.Column="0"
+      Name="btn_Clear"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Content="Clear File"
+      MinHeight="32"
+      MaxHeight="32"
+      Width="Auto"
+      IsEnabled="False" />
+    <ListBox
+      Grid.Row="5"
+      Grid.Column="1"
+      Grid.ColumnSpan="2"
+      Name="lsbox_File"
+      Margin="5"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+      AllowDrop="True"
+      IsEnabled="True"
+      TabIndex="0">
+      <ListBox.Items>
+        <ListBoxItem HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+          <TextBlock Text="Drag and drop files here - *.msi" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </ListBoxItem>
+      </ListBox.Items>
+    </ListBox>
   </Grid>
 </Window>
+
 "@
 
 	# Create a new XML node reader for reading the XAML content
@@ -262,18 +363,84 @@ function Show-MSI_psf {
 		}
 	}
 
+	function Get-MsiProperties {
+		param (
+			[Parameter(Mandatory = $true)]
+			[IO.FileInfo[]]$Path
+		)
+	
+		# Check if the MSI file path exists
+		if (-not (Test-Path $Path)) {
+			throw "The file $Path does not exist."
+		}
+	
+		# Create a new Windows Installer COM object
+		$WindowsInstaller = New-Object -ComObject WindowsInstaller.Installer
+	
+		# Open the MSI database in read-only mode
+		$MSIDatabase = $WindowsInstaller.GetType().InvokeMember("OpenDatabase", "InvokeMethod", $null, $WindowsInstaller, @($Path.FullName, 0))
+	
+		# Open a view on the Property table
+		$MSIPropertyView = $MSIDatabase.GetType().InvokeMember("OpenView", "InvokeMethod", $null, $MSIDatabase, @("SELECT * FROM Property"))
+	
+		# Execute the view query
+		$MSIPropertyView.GetType().InvokeMember("Execute", "InvokeMethod", $null, $MSIPropertyView, $null)
+	
+		# Fetch the first record from the result set
+		$MSIRecord = $MSIPropertyView.GetType().InvokeMember("Fetch", "InvokeMethod", $null, $MSIPropertyView, $null)
+	
+		# Initialize an empty hashtable to store properties
+		$Properties = @{}
+	
+		# Loop through all records in the result set
+		while ($null -ne $MSIRecord) {
+			# Get the property name from the first column
+			$property = $MSIRecord.GetType().InvokeMember("StringData", "GetProperty", $null, $MSIRecord, @(1))
+			
+			# Get the property value from the second column
+			$Value = $MSIRecord.GetType().InvokeMember("StringData", "GetProperty", $null, $MSIRecord, @(2))
+			
+			# Add the property name and value to the hashtable
+			$Properties[$Property] = $Value
+			
+			# Fetch the next record from the result set
+			$MSIRecord = $MSIPropertyView.GetType().InvokeMember("Fetch", "InvokeMethod", $null, $MSIPropertyView, $null)
+		}
+	
+		# Return the hashtable of properties
+		$Properties
+	}
+
 	$lsbox_File.Add_Drop(
 		{
 			$filename = $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)
 			if ($filename) {
-				$FileInfo = Get-MsiDatabaseProperties -FilePath $filename
-				$txt_Name.Text = $FileInfo.ProductName
-				$txt_Manufacturer.Text = $FileInfo.Manufacturer
-				$txt_Version.Text = $FileInfo.ProductVersion
-				$txt_Code.Text = $FileInfo.ProductCode
+				# Get the MSI file properties
+				#$FileInfo = Get-MsiDatabaseProperties -FilePath $filename
+				$FileInfo = Get-MsiProperties -Path $filename
+
+				# Populate the textboxes with the MSI file properties
+				$txt_ProductName.Text = $FileInfo.ProductName
+				$txt_Manufacture.Text = $FileInfo.Manufacturer
+				$txt_ProductVersion.Text = $FileInfo.ProductVersion
+				$txt_ProductCode.Text = $FileInfo.ProductCode
+				$txt_UpgradeCode.Text = $FileInfo.UpgradeCode
+
+				# Enable the Copy buttons
+				$btn_ProductName_Copy.IsEnabled = $true
+				$btn_Manufacture_Copy.IsEnabled = $true
+				$btn_ProductVersion_Copy.IsEnabled = $true
+				$btn_ProductCode_Copy.IsEnabled = $true
+				$btn_UpgradeCode_Copy.IsEnabled = $true
+				$btn_Clear.IsEnabled = $true
+
+				# Clear the listbox and add the filename
 				$lsbox_File.Items.Clear()
 				$lsbox_File.Items.Add($filename[0])
-			}
+
+				# Center the text of the added item
+				$lsbox_File.HorizontalContentAlignment = 'Center'	
+   }
 		}
 	)
 
@@ -283,7 +450,8 @@ function Show-MSI_psf {
 			if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
 				foreach ($File in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) {
 					# Check if the file is an MSI file
-					if ((Get-Item $File).Extension -eq ".msi") {
+					#Write-Host "Extension: $([System.IO.Path]::GetExtension($File))"
+					if (([System.IO.Path]::GetExtension($File)) -eq ".msi") {
 						# Set the drag effect to Copy if the file is an MSI file
 						$_.Effects = [System.Windows.DragDropEffects]::Copy
 					}
@@ -291,32 +459,62 @@ function Show-MSI_psf {
 						# Set the drag effect to None if the file is not an MSI file
 						$_.Effects = [System.Windows.DragDropEffects]::None
 					}
+					$_.Handled = $true
 				}
 			}
 		}
 	)
 
-	$btn_Name_Copy.add_Click(
+	$btn_Clear.add_Click(
 		{
-			[System.Windows.Forms.Clipboard]::SetText($txt_Name.Text)
+			# Loop through all items and remove from the listbox
+			for ($i = ($lsbox_File.Items.Count); $i -ge 0; $i--) {
+				$CurrentItem = $lsbox_File.Items[$i]
+				$lsbox_File.Items.Remove($CurrentItem)
+			}
+			# Clear all textboxes
+			$txt_ProductName.Clear()
+			$txt_Manufacture.Clear()
+			$txt_ProductVersion.Clear()
+			$txt_ProductCode.Clear()
+			$txt_UpgradeCode.Clear()
+
+			# Disable the Copy buttons
+			$btn_ProductName_Copy.IsEnabled = $false
+			$btn_Manufacture_Copy.IsEnabled = $false
+			$btn_ProductVersion_Copy.IsEnabled = $false
+			$btn_ProductCode_Copy.IsEnabled = $false
+			$btn_UpgradeCode_Copy.IsEnabled = $false
 		}
 	)
 
-	$btn_Man_Copy.add_Click(
+	$btn_ProductName_Copy.add_Click(
+		{
+			[System.Windows.Forms.Clipboard]::SetText($txt_ProductName.Text)
+		}
+	)
+
+	$btn_Manufacture_Copy.add_Click(
 		{
 			[System.Windows.Forms.Clipboard]::SetText($txt_Manufacturer.Text)
 		}
 	)
 
-	$btn_Version_Copy.add_Click(
+	$btn_ProductVersion_Copy.add_Click(
 		{
-			[System.Windows.Forms.Clipboard]::SetText($txt_Version.Text)
+			[System.Windows.Forms.Clipboard]::SetText($txt_ProductVersion.Text)
 		}
 	)
 
-	$btn_Code_Copy.add_Click(
+	$btn_ProductCode_Copy.add_Click(
 		{
-			[System.Windows.Forms.Clipboard]::SetText($txt_Code.Text)
+			[System.Windows.Forms.Clipboard]::SetText($txt_ProductCode.Text)
+		}
+	)
+
+	$btn_UpgradeCode_Copy.add_Click(
+		{
+			[System.Windows.Forms.Clipboard]::SetText($txt_UpgradeCode.Text)
 		}
 	)
 
