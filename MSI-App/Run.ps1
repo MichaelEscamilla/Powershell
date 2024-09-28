@@ -446,6 +446,7 @@ function Show-MSI_psf {
 
 	$lsbox_File.Add_DragOver(
 		{
+      Write-Host "Inside DragOver"
 			# Check if the dragged data contains file drop data
 			if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
         Write-Host "FileDrop: [$($_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))]"
