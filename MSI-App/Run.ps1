@@ -3,7 +3,6 @@ $Global:currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Secur
 if (($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
   Write-Warning "The script is running as an administrator."
   Write-Warning "Drag and Drog will not work while running as an administrator."
-  
 }
 
 # Load Assemblies
