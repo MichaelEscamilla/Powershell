@@ -489,11 +489,11 @@ $MenuItem_Install.add_Click({
 $MenuItem_Uninstall.add_Click({
     Write-Host "Menu Item Uninstall Clicked"
     Write-Host "MyInvocation: [$($MyInvocation)]"
-    Write-Host "MyInvocation.MyCommand: [$($MyInvocation.MyCommand)]"
+    Write-Host "MyInvocation.ScriptName: [$($MyInvocation.ScriptName)]"
     Write-Host "MyInvocation.MyCommand.Path: [$($MyInvocation.MyCommand.Path)]"
-    Write-Host "PSCommandPath: [$($PSCommandPath)]"
-    Write-Host "PSCommandPath.MyCommand: [$($PSCommandPath.MyCommand)]"
-    Write-Host "PSCommandPath.MyCommand.Path: [$($PSCommandPath.MyCommand.Path)]"
+    Write-Host "PSCommandPath: [$($PSCommandPath | FT)]"
+    Write-Host "PSCommandPath Leaf: [$(Split-Path $PSCommandPath -Leaf)]"
+    Write-Host "PSCommandPath LeafBase: [$(Split-Path $PSCommandPath -LeafBase)]"
   })
 
 #Show the WPF Window
