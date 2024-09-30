@@ -489,7 +489,7 @@ $MenuItem_Install.add_Click({
 $MenuItem_Uninstall.add_Click({
     Write-Host "Menu Item Uninstall Clicked"
     # Check if $PSCommandPath is available
-    if ($PSCommandPath -eq "") {
+    if ($PSCommandPath -ne "") {
       Write-Host "PSCommandPath: [$($PSCommandPath)]"
       Write-Host "PSCommandPath Leaf: [$(Split-Path $PSCommandPath -Leaf)]"
       Write-Host "PSCommandPath LeafBase: [$(Split-Path $PSCommandPath -LeafBase)]"
