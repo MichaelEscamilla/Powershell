@@ -1,3 +1,7 @@
+param (
+  [string]$FilePath
+)
+
 # Check if the script is running as administrator
 $Global:currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
