@@ -496,11 +496,13 @@ $MenuItem_Uninstall.add_Click({
     }
     else {
       Write-Host "PSCommandPath is not available."
-      Write-Host "Downloading the script from a predefined URL."
-      $ScriptURL = "https://raw.githubusercontent.com/MichaelEscamilla/Powershell/refs/heads/main/MSI-App/Run.ps1"
-      $Destination = "$env:LOCALAPPDATA\GetMSIInformation\GetMSIInformation.ps1"
+      # Script URL
+      $ScriptURL = "https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/MSI-App/Run.ps1"
+      Write-Host "Downloading the script from a predefined URL: [$ScriptURL]"
+      # Create a new directory in the LOCALAPPDATA folder
+      $DestinationFolder = New-Item -ItemType Directory -Path $env:LOCALAPPDATA -Name "GetMSIInformation" -ErrorAction SilentlyContinue
       try {
-        Invoke-WebRequest -Uri $ScriptURL -OutFile $Destination -ErrorAction Stop
+        Invoke-WebRequest -Uri $ScriptURL -OutFile "$($DestinationFolder.FullName)\GetMSIInformation.ps1" -ErrorAction Stop
         Write-Host "Script downloaded successfully to $Destination"
       }
       catch {
