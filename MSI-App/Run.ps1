@@ -11,10 +11,10 @@ Add-Type -AssemblyName System.Windows.Forms
 
 # Import XAML
 #[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
-#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
+[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
 
 # Build the GUI
-[xml]$XAMLformMSIProperties = @"
+<#[xml]$XAMLformMSIProperties = @"
 <Window
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   Name="form1"
@@ -278,12 +278,11 @@ Add-Type -AssemblyName System.Windows.Forms
   </Grid>
 </Window>
 
-"@
+"@#>
 
 # Create a new XML node reader for reading the XAML content
 $readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIProperties
 
-	
 # Load the XAML content into a WPF window object using the XAML reader
 [System.Windows.Window]$formMSIProperties = [Windows.Markup.XamlReader]::Load($readerformMSIProperties)
 
@@ -351,6 +350,7 @@ $formMSIProperties.Add_Loaded({
       $lsbox_File.Background = [System.Windows.Media.Brushes]::Yellow
       $lsbox_File.FontWeight = 'Bold'
     }
+    Write-Host "Menu Items: [$($formMSIProperties.FindName('MenuItem_Install'))]"
   })
 
 $lsbox_File.Add_Drop({
@@ -373,6 +373,7 @@ $lsbox_File.Add_Drop({
       $btn_ProductVersion_Copy.IsEnabled = $true
       $btn_ProductCode_Copy.IsEnabled = $true
       $btn_UpgradeCode_Copy.IsEnabled = $true
+      $btn_FilePath_Copy.IsEnabled = $true
       $btn_Clear.IsEnabled = $true
 
       # Clear the listbox and add the filename
@@ -420,26 +421,57 @@ $btn_Clear.add_Click({
     $btn_ProductVersion_Copy.IsEnabled = $false
     $btn_ProductCode_Copy.IsEnabled = $false
     $btn_UpgradeCode_Copy.IsEnabled = $false
+    $btn_FilePath_Copy.IsEnabled = $false
   })
 
 $btn_ProductName_Copy.add_Click({
-  [System.Windows.Forms.Clipboard]::SetText($txt_ProductName.Text)
+    [System.Windows.Forms.Clipboard]::SetText($txt_ProductName.Text)
   })
 
 $btn_Manufacture_Copy.add_Click({
-  [System.Windows.Forms.Clipboard]::SetText($txt_Manufacturer.Text)
+    [System.Windows.Forms.Clipboard]::SetText($txt_Manufacturer.Text)
   })
 
 $btn_ProductVersion_Copy.add_Click({
-  [System.Windows.Forms.Clipboard]::SetText($txt_ProductVersion.Text)
+    [System.Windows.Forms.Clipboard]::SetText($txt_ProductVersion.Text)
   })
 
 $btn_ProductCode_Copy.add_Click({
-  [System.Windows.Forms.Clipboard]::SetText($txt_ProductCode.Text)
+    [System.Windows.Forms.Clipboard]::SetText($txt_ProductCode.Text)
   })
 
 $btn_UpgradeCode_Copy.add_Click({
-  [System.Windows.Forms.Clipboard]::SetText($txt_UpgradeCode.Text)
+    [System.Windows.Forms.Clipboard]::SetText($txt_UpgradeCode.Text)
+  })
+
+$btn_FilePath_Copy.add_Click({
+    if ($lsbox_File.Items[0] -match "\s") {
+      [System.Windows.Forms.Clipboard]::SetText("`"$($lsbox_File.Items[0])`"")
+      Write-Host "Copied to Clipboard: [`"$($lsbox_File.Items[0])`"]"
+    }
+    else {
+      [System.Windows.Forms.Clipboard]::SetText($lsbox_File.Items[0])
+      Write-Host "Copied to Clipboard: [$($lsbox_File.Items[0])]"
+    }
+  })
+
+$MenuItem_Install.add_Click({
+    Write-Host "Menu Item Install Clicked"
+    Write-Host "Creating GetMSIInformation folder in LOCALAPPDATA folder"
+    # Create a new directory in the LOCALAPPDATA folder
+    New-Item -ItemType Directory -Path $env:LOCALAPPDATA -Name "GetMSIInformation" -ErrorAction SilentlyContinue
+    # Copy the GetMSIInfo.ps1 script to the new directory
+    Write-Host "Copying Script to GetMSIInfo Folder"
+    $scriptName = [System.IO.Path]::GetFileName($MyInvocation.MyCommand.Path)
+    Write-Host "Current script name: $scriptName"
+    Copy-Item "$PSScriptRoot\$($scriptName)" -Destination "$env:LOCALAPPDATA\GetMSIInformation\GetMSIInformation.ps1" -ErrorAction SilentlyContinue
+  })
+
+$MenuItem_Uninstall.add_Click({
+    Write-Host "Menu Item Uninstall Clicked"
+    Write-Host "MyInvocation PSCommandPath: $($MyInvocation.PSCommandPath)"
+    Write-Host "PSCommandPath: $($PSCommandPath | Select *)"
+    Write-Host "PSCommandPath.MyCommand.Path: $($PSCommandPath.MyCommand.Path)"
   })
 
 #Show the WPF Window
