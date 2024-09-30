@@ -476,14 +476,32 @@ $btn_FilePath_Copy.add_Click({
 
 $MenuItem_Install.add_Click({
     Write-Host "Menu Item Install Clicked"
-    Write-Host "Creating GetMSIInformation folder in LOCALAPPDATA folder"
+    # Set Script Name
+    $SaveAsScriptName = "GetMSIInformation.ps1"
+
     # Create a new directory in the LOCALAPPDATA folder
-    New-Item -ItemType Directory -Path $env:LOCALAPPDATA -Name "GetMSIInformation" -ErrorAction SilentlyContinue
-    # Copy the GetMSIInfo.ps1 script to the new directory
-    Write-Host "Copying Script to GetMSIInfo Folder"
-    $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
-    Write-Host "Current script name: $scriptName"
-    Copy-Item "$PSScriptRoot\$($scriptName)" -Destination "$env:LOCALAPPDATA\GetMSIInformation\GetMSIInformation.ps1" -ErrorAction SilentlyContinue
+    Write-Host "Creating GetMSIInformation folder in LOCALAPPDATA folder"
+    $DestinationFolder = New-Item -ItemType Directory -Path $env:LOCALAPPDATA -Name "GetMSIInformation" -ErrorAction SilentlyContinue
+
+    # Check if the script is being Invoked from the Internet
+    if ($PSCommandPath -ne "") {
+      # Copy the script to the new directory
+      Write-Host "Copying Script to GetMSIInfo Folder"
+      Copy-Item "$PSScriptRoot\$([System.IO.Path]::GetFileName($PSCommandPath))" -Destination "$($DestinationFolder.FullName)\$($SaveAsScriptName)" -ErrorAction SilentlyContinue
+    }
+    else {
+      Write-Host "PSCommandPath is not available."
+      # Script URL
+      $ScriptURL = "https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/MSI-App/Run.ps1"
+      Write-Host "Downloading the script from URL: [$ScriptURL]"
+      try {
+        Invoke-WebRequest -Uri $ScriptURL -OutFile "$($DestinationFolder.FullName)\GetMSIInformation.ps1" -ErrorAction Stop
+        Write-Host "Script downloaded successfully saved: [$($DestinationFolder.FullName)\GetMSIInformation.ps1"
+      }
+      catch {
+        Write-Host "Failed to download the script: $_"
+      }
+    }
   })
 
 $MenuItem_Uninstall.add_Click({
@@ -492,22 +510,9 @@ $MenuItem_Uninstall.add_Click({
     if ($PSCommandPath -ne "") {
       Write-Host "PSCommandPath: [$($PSCommandPath)]"
       Write-Host "PSCommandPath Leaf: [$(Split-Path $PSCommandPath -Leaf)]"
-      Write-Host "PSCommandPath LeafBase: [$(Split-Path $PSCommandPath -LeafBase)]"
     }
     else {
       Write-Host "PSCommandPath is not available."
-      # Script URL
-      $ScriptURL = "https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/MSI-App/Run.ps1"
-      Write-Host "Downloading the script from a predefined URL: [$ScriptURL]"
-      # Create a new directory in the LOCALAPPDATA folder
-      $DestinationFolder = New-Item -ItemType Directory -Path $env:LOCALAPPDATA -Name "GetMSIInformation" -ErrorAction SilentlyContinue
-      try {
-        Invoke-WebRequest -Uri $ScriptURL -OutFile "$($DestinationFolder.FullName)\GetMSIInformation.ps1" -ErrorAction Stop
-        Write-Host "Script downloaded successfully to $Destination"
-      }
-      catch {
-        Write-Host "Failed to download the script: $_"
-      }
     }
   })
 
