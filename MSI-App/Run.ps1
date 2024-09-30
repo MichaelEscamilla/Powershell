@@ -481,7 +481,13 @@ $MenuItem_Install.add_Click({
 
     # Create a new directory in the LOCALAPPDATA folder
     Write-Host "Creating GetMSIInformation folder in LOCALAPPDATA folder"
-    $DestinationFolder = New-Item -ItemType Directory -Path $env:LOCALAPPDATA -Name "GetMSIInformation" -ErrorAction SilentlyContinue
+    $DestinationFolderPath = "$env:LOCALAPPDATA\GetMSIInformation"
+    if(-not (Test-Path $DestinationFolderPath)) {
+      $DestinationFolder = New-Item -ItemType Directory -Path $DestinationFolderPath -ErrorAction SilentlyContinue
+    }
+    else {
+      $DestinationFolder = Get-Item -Path $DestinationFolderPath
+    }
 
     # Check if the script is being Invoked from the Internet
     if ($PSCommandPath -ne "") {
