@@ -488,12 +488,25 @@ $MenuItem_Install.add_Click({
 
 $MenuItem_Uninstall.add_Click({
     Write-Host "Menu Item Uninstall Clicked"
-    Write-Host "MyInvocation: [$($MyInvocation)]"
-    Write-Host "MyInvocation.ScriptName: [$($MyInvocation.ScriptName)]"
-    Write-Host "MyInvocation.MyCommand.Path: [$($MyInvocation.MyCommand.Path)]"
-    Write-Host "PSCommandPath: [$($PSCommandPath | FT)]"
-    Write-Host "PSCommandPath Leaf: [$(Split-Path $PSCommandPath -Leaf)]"
-    Write-Host "PSCommandPath LeafBase: [$(Split-Path $PSCommandPath -LeafBase)]"
+    # Check if $PSCommandPath is available
+    if ($PSCommandPath -eq "") {
+      Write-Host "PSCommandPath: [$($PSCommandPath)]"
+      Write-Host "PSCommandPath Leaf: [$(Split-Path $PSCommandPath -Leaf)]"
+      Write-Host "PSCommandPath LeafBase: [$(Split-Path $PSCommandPath -LeafBase)]"
+    }
+    else {
+      Write-Host "PSCommandPath is not available."
+      Write-Host "Downloading the script from a predefined URL."
+      $ScriptURL = "https://raw.githubusercontent.com/MichaelEscamilla/Powershell/refs/heads/main/MSI-App/Run.ps1"
+      $Destination = "$env:LOCALAPPDATA\GetMSIInformation\GetMSIInformation.ps1"
+      try {
+        Invoke-WebRequest -Uri $ScriptURL -OutFile $Destination -ErrorAction Stop
+        Write-Host "Script downloaded successfully to $Destination"
+      }
+      catch {
+        Write-Host "Failed to download the script: $_"
+      }
+    }
   })
 
 #Show the WPF Window
