@@ -370,7 +370,6 @@ $formMSIProperties.Add_Loaded({
       $lsbox_File.Background = [System.Windows.Media.Brushes]::Yellow
       $lsbox_File.FontWeight = 'Bold'
     }
-    Write-Host "Menu Items: [$($formMSIProperties.FindName('MenuItem_Install'))]"
   })
 
 $lsbox_File.Add_Drop({
@@ -489,11 +488,12 @@ $MenuItem_Install.add_Click({
 
 $MenuItem_Uninstall.add_Click({
     Write-Host "Menu Item Uninstall Clicked"
-    Write-Host "MyInvocation: $($MyInvocation)"
-    Write-Host "MyInvocation.PSCommandPath: $($MyInvocation.PSCommandPath)"
-    Write-Host "PSCommandPath: $($PSCommandPath)"
-    Write-Host "PSCommandPath.MyCommand: $($PSCommandPath.MyCommand)"
-    Write-Host "PSCommandPath.MyCommand.Path: $($PSCommandPath.MyCommand.Path)"
+    Write-Host "MyInvocation: [$($MyInvocation)]"
+    Write-Host "MyInvocation.MyCommand: [$($MyInvocation.MyCommand)]"
+    Write-Host "MyInvocation.MyCommand.Path: [$($MyInvocation.MyCommand.Path)]"
+    Write-Host "PSCommandPath: [$($PSCommandPath)]"
+    Write-Host "PSCommandPath.MyCommand: [$($PSCommandPath.MyCommand)]"
+    Write-Host "PSCommandPath.MyCommand.Path: [$($PSCommandPath.MyCommand.Path)]"
   })
 
 #Show the WPF Window
