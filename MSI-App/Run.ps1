@@ -1,4 +1,21 @@
+<#
+.SYNOPSIS
+This script provides a graphical user interface (GUI) for viewing and copying properties of MSI files.
+
+.DESCRIPTION
+The script creates a WPF-based GUI that allows users to drag and drop MSI files to view their properties such as Product Name, Manufacturer, Product Version, Product Code, and Upgrade Code.
+It also provides functionality to copy these properties to the clipboard and to clear the displayed information.
+Additionally, the script includes options to install and uninstall a context menu item for MSI files to retrieve their properties.
+
+.PARAMETER FilePath
+Optional parameter to specify the path of the MSI file to automatically load the information for.
+
+.NOTES
+Author: Michael Escamilla
+Date: 9-30-2024
+#>
 param (
+  [Parameter(Mandatory = $false)]
   [string]$FilePath
 )
 
@@ -13,9 +30,6 @@ if (($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adminis
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 
-# Import XAML
-#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
-#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
 
 # Build the GUI
 [xml]$XAMLformMSIProperties = @"
@@ -257,6 +271,7 @@ Add-Type -AssemblyName System.Windows.Forms
         Width="Auto"
         IsEnabled="False"/>
 
+      <!--
       <Button
         Grid.Row="5"
         Grid.Column="0"
@@ -268,7 +283,20 @@ Add-Type -AssemblyName System.Windows.Forms
         MinHeight="32"
         MaxHeight="32"
         Width="Auto"
-        IsEnabled="False"/>
+        IsEnabled="False" />
+      -->
+        <Button
+        Grid.Row="5"
+        Grid.Column="0"
+        Name="btn_AllProperties"
+        Margin="5"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        Content="All Properties"
+        MinHeight="32"
+        MaxHeight="32"
+        Width="Auto"
+        IsEnabled="False" />
       <ListBox
         Grid.Row="5"
         Grid.Column="1"
@@ -303,6 +331,10 @@ Add-Type -AssemblyName System.Windows.Forms
   </DockPanel>
 </Window>
 "@
+
+# Import XAML
+#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
+#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
 
 # Create a new XML node reader for reading the XAML content
 $readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIProperties
@@ -363,16 +395,71 @@ function Get-MsiProperties {
   $Properties
 }
 
+function Enable-AllButtons {
+  # Enable the Copy buttons
+  $btn_ProductName_Copy.IsEnabled = $true
+  $btn_Manufacture_Copy.IsEnabled = $true
+  $btn_ProductVersion_Copy.IsEnabled = $true
+  $btn_ProductCode_Copy.IsEnabled = $true
+  $btn_UpgradeCode_Copy.IsEnabled = $true
+  $btn_FilePath_Copy.IsEnabled = $true
+  $btn_Clear.IsEnabled = $true
+  $btn_AllProperties.IsEnabled = $true
+}
+
+function Disable-AllButtons {
+  # Disable the Copy buttons
+  $btn_ProductName_Copy.IsEnabled = $false
+  $btn_Manufacture_Copy.IsEnabled = $false
+  $btn_ProductVersion_Copy.IsEnabled = $false
+  $btn_ProductCode_Copy.IsEnabled = $false
+  $btn_UpgradeCode_Copy.IsEnabled = $false
+  $btn_FilePath_Copy.IsEnabled = $false
+  $btn_Clear.IsEnabled = $false
+  $btn_AllProperties.IsEnabled = $false
+}
+
+function Clear-Textboxes {
+  # Clear all textboxes
+  $txt_ProductName.Clear()
+  $txt_Manufacture.Clear()
+  $txt_ProductVersion.Clear()
+  $txt_ProductCode.Clear()
+  $txt_UpgradeCode.Clear()
+}
+
 $formMSIProperties.Add_Loaded({
     # Check if the script is running as an administrator
     if (($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
       # Clear the listbox
       $lsbox_File.Items.Clear()
+
       # Add a warning message to the listbox
       $lsbox_File.Items.Add("WARNING: Running as Administrator | Drag and Drop will not work.")
+
       # Make the warning message bold and yellow
       $lsbox_File.Background = [System.Windows.Media.Brushes]::Yellow
       $lsbox_File.FontWeight = 'Bold'
+    }
+
+    # Check if the FilePath parameter is provided
+    if ($FilePath) {
+      # Get the MSI file properties
+      $FileInfo = Get-MsiProperties -Path $FilePath
+
+      # Populate the textboxes with the MSI file properties
+      $txt_ProductName.Text = $FileInfo.ProductName
+      $txt_Manufacture.Text = $FileInfo.Manufacturer
+      $txt_ProductVersion.Text = $FileInfo.ProductVersion
+      $txt_ProductCode.Text = $FileInfo.ProductCode
+      $txt_UpgradeCode.Text = $FileInfo.UpgradeCode
+
+      # Enable the Copy buttons
+      Enable-AllButtons
+
+      # Clear the listbox and add the filename
+      $lsbox_File.Items.Clear()
+      $lsbox_File.Items.Add($FilePath)
     }
   })
 
@@ -391,20 +478,11 @@ $lsbox_File.Add_Drop({
       $txt_UpgradeCode.Text = $FileInfo.UpgradeCode
 
       # Enable the Copy buttons
-      $btn_ProductName_Copy.IsEnabled = $true
-      $btn_Manufacture_Copy.IsEnabled = $true
-      $btn_ProductVersion_Copy.IsEnabled = $true
-      $btn_ProductCode_Copy.IsEnabled = $true
-      $btn_UpgradeCode_Copy.IsEnabled = $true
-      $btn_FilePath_Copy.IsEnabled = $true
-      $btn_Clear.IsEnabled = $true
+      Enable-AllButtons
 
       # Clear the listbox and add the filename
       $lsbox_File.Items.Clear()
       $lsbox_File.Items.Add($filename[0])
-
-      # Center the text of the added item
-      $lsbox_File.HorizontalContentAlignment = 'Center'	
     }
   })
 
@@ -432,19 +510,10 @@ $btn_Clear.add_Click({
       $lsbox_File.Items.Remove($CurrentItem)
     }
     # Clear all textboxes
-    $txt_ProductName.Clear()
-    $txt_Manufacture.Clear()
-    $txt_ProductVersion.Clear()
-    $txt_ProductCode.Clear()
-    $txt_UpgradeCode.Clear()
+    Clear-Textboxes
 
     # Disable the Copy buttons
-    $btn_ProductName_Copy.IsEnabled = $false
-    $btn_Manufacture_Copy.IsEnabled = $false
-    $btn_ProductVersion_Copy.IsEnabled = $false
-    $btn_ProductCode_Copy.IsEnabled = $false
-    $btn_UpgradeCode_Copy.IsEnabled = $false
-    $btn_FilePath_Copy.IsEnabled = $false
+    Disable-AllButtons
   })
 
 $btn_ProductName_Copy.add_Click({
@@ -467,12 +536,20 @@ $btn_UpgradeCode_Copy.add_Click({
     [System.Windows.Forms.Clipboard]::SetText($txt_UpgradeCode.Text)
   })
 
+$btn_AllProperties.add_Click({
+    $SelectedProperty = Get-MsiProperties -Path $lsbox_File.Items[0] | Out-GridView -Title "MSI Database Properties for $($lsbox_File.Items[0])" -OutputMode Single
+    $SelectedProperty.Value | Set-Clipboard
+  })
+
 $btn_FilePath_Copy.add_Click({
+    # Check if the item in the listbox contains spaces
     if ($lsbox_File.Items[0] -match "\s") {
+      # Copy the item in the listbox to the clipboard with quotes
       [System.Windows.Forms.Clipboard]::SetText("`"$($lsbox_File.Items[0])`"")
       Write-Host "Copied to Clipboard: [`"$($lsbox_File.Items[0])`"]"
     }
     else {
+      # Copy the item in the listbox to the clipboard without quotes
       [System.Windows.Forms.Clipboard]::SetText($lsbox_File.Items[0])
       Write-Host "Copied to Clipboard: [$($lsbox_File.Items[0])]"
     }
@@ -515,36 +592,58 @@ $MenuItem_Install.add_Click({
 
     # Reg2CI (c) 2020 by Roger Zander
     # https://github.com/asjimene/GetMSIInfo/blob/master/GetMSIInfo.ps1
+
+    # Check if the registry path for .msi file associations exists, if not, create it.
     if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi") -ne $true) {
       New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi" -Force -ErrorAction SilentlyContinue 
     }
+
+    # Check if the 'shell' subkey exists under the .msi file associations, if not, create it.
     if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell") -ne $true) {
       New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell" -Force -ErrorAction SilentlyContinue 
     }
+
+    # Check if the 'Get MSI Information' subkey exists under 'shell', if not, create it.
     if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -ne $true) {
       New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information" -Force -ErrorAction SilentlyContinue 
     }
+
+    # Check if the 'command' subkey exists under 'Get MSI Information', if not, create it.
     if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command") -ne $true) {
       New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command" -Force -ErrorAction SilentlyContinue 
     }
+
+    # Set the default value of the 'Get MSI Information' key to "Get MSI Information".
     New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information' -Name '(default)' -Value "Get MSI Information" -PropertyType String -Force -ea SilentlyContinue;
-    New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command' -Name '(default)' -Value "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$($DestinationFolder.FullName)\$($SaveAsScriptName)`" -LiteralPath '%1'" -PropertyType String -Force -ErrorAction SilentlyContinue;
-    
+
+    # Set the default value of the 'command' key to execute a PowerShell script with the .msi file as an argument.
+    New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command' -Name '(default)' -Value "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$($DestinationFolder.FullName)\$($SaveAsScriptName)`" -FilePath '%1'" -PropertyType String -Force -ErrorAction SilentlyContinue;
     Write-Host "Installation Complete"
   })
 
 $MenuItem_Uninstall.add_Click({
     Write-Host "Menu Item Uninstall Clicked"
     Write-Output "Removing Script from LOCALAPPDATA"
+
+    # Remove the script folder from the LOCALAPPDATA folder
     Remove-item "$env:LOCALAPPDATA\GetMSIInformation" -Force -Recurse -ErrorAction SilentlyContinue
 
+    # Reg2CI (c) 2020 by Roger Zander
+    # https://github.com/asjimene/GetMSIInfo/blob/master/GetMSIInfo.ps1
+
+  
     Write-Output "Cleaning Up Registry"
+    # Remove the 'Get MSI Information' registry key if it exists
     if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -eq $true) { 
       Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information" -force -Recurse -ea SilentlyContinue 
     }
+
+    # Remove the 'shell' registry key if it exists
     if ([System.String]::IsNullOrEmpty((Get-ChildItem "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell"))) {
       Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell" -force -Recurse -ea SilentlyContinue 
     }
+
+    # Remove the '.msi' file associations exists registry key if it is exists
     if ([System.String]::IsNullOrEmpty((Get-ChildItem "HKCU:\Software\Classes\SystemFileAssociations\.msi"))) {
       Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi" -force -Recurse -ea SilentlyContinue 
     }
