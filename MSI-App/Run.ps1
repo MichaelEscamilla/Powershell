@@ -482,7 +482,7 @@ $MenuItem_Install.add_Click({
     # Create a new directory in the LOCALAPPDATA folder
     Write-Host "Creating GetMSIInformation folder in LOCALAPPDATA folder"
     $DestinationFolderPath = "$env:LOCALAPPDATA\GetMSIInformation"
-    if(-not (Test-Path $DestinationFolderPath)) {
+    if (-not (Test-Path $DestinationFolderPath)) {
       $DestinationFolder = New-Item -ItemType Directory -Path $DestinationFolderPath -ErrorAction SilentlyContinue
     }
     else {
@@ -508,18 +508,44 @@ $MenuItem_Install.add_Click({
         Write-Host "Failed to download the script: $_"
       }
     }
+
+    # Reg2CI (c) 2020 by Roger Zander
+    # https://github.com/asjimene/GetMSIInfo/blob/master/GetMSIInfo.ps1
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi") -ne $true) {
+      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi" -Force -ErrorAction SilentlyContinue 
+    }
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell") -ne $true) {
+      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell" -Force -ErrorAction SilentlyContinue 
+    }
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -ne $true) {
+      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information" -Force -ErrorAction SilentlyContinue 
+    }
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command") -ne $true) {
+      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command" -Force -ErrorAction SilentlyContinue 
+    }
+    New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information' -Name '(default)' -Value "Get MSI Information" -PropertyType String -Force -ea SilentlyContinue;
+    New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command' -Name '(default)' -Value "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$($DestinationFolder.FullName)\$($SaveAsScriptName)`" -LiteralPath '%1'" -PropertyType String -Force -ErrorAction SilentlyContinue;
+    
+    Write-Host "Installation Complete"
   })
 
 $MenuItem_Uninstall.add_Click({
     Write-Host "Menu Item Uninstall Clicked"
-    # Check if $PSCommandPath is available
-    if ($PSCommandPath -ne "") {
-      Write-Host "PSCommandPath: [$($PSCommandPath)]"
-      Write-Host "PSCommandPath Leaf: [$(Split-Path $PSCommandPath -Leaf)]"
+    Write-Output "Removing Script from LOCALAPPDATA"
+    Remove-item "$env:LOCALAPPDATA\GetMSIInformation" -Force -Recurse -ErrorAction SilentlyContinue
+
+    Write-Output "Cleaning Up Registry"
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -eq $true) { 
+      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information" -force -Recurse -ea SilentlyContinue 
     }
-    else {
-      Write-Host "PSCommandPath is not available."
+    if ([System.String]::IsNullOrEmpty((Get-ChildItem "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell"))) {
+      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell" -force -Recurse -ea SilentlyContinue 
     }
+    if ([System.String]::IsNullOrEmpty((Get-ChildItem "HKCU:\Software\Classes\SystemFileAssociations\.msi"))) {
+      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi" -force -Recurse -ea SilentlyContinue 
+    }
+
+    Write-Output "Uninstallation Complete!"
   })
 
 #Show the WPF Window
