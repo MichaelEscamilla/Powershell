@@ -32,32 +32,45 @@ Add-Type -AssemblyName System.Windows.Forms
 
 
 # Build the GUI
-<#[xml]$XAMLformMSIProperties = @"
+[xml]$XAMLformMSIProperties = @"
 <Window
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   Name="form1"
   Width="900"
-  Height="350"
+  Height="425"
   ResizeMode="NoResize"
   Title="MSI Properties"
-  FontSize="15">
+  FontSize="12">
 
   <DockPanel>
     <Menu DockPanel.Dock="Top">
       <MenuItem Header="Right Click Menu">
-        <MenuItem Name="MenuItem_Install" Header="Install"/>
-        <MenuItem Name="MenuItem_Uninstall" Header="Uninstall"/>
+        <MenuItem Name="MenuItem_Install"
+                  Header="Install"/>
+        <MenuItem Name="MenuItem_Uninstall"
+                  Header="Uninstall"/>
+      </MenuItem>
+      <MenuItem Header="About">
+        <MenuItem Name="MenuItem_GitHub"
+                  Header="GitHub - GetMSIInformation"/>
+        <MenuItem Name="MenuItem_About"
+                  Header="michaeltheadmin.com"/>
       </MenuItem>
     </Menu>
 
     <Grid>
       <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="5"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
@@ -65,240 +78,236 @@ Add-Type -AssemblyName System.Windows.Forms
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="0.15*"/>
       </Grid.ColumnDefinitions>
+      <Grid.Resources>
+        <Style TargetType="Label">
+          <Setter Property="Margin"
+                  Value="2.5"/>
+          <Setter Property="HorizontalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="HorizontalContentAlignment"
+                  Value="Right"/>
+          <Setter Property="VerticalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="VerticalContentAlignment"
+                  Value="Center"/>
+          <Setter Property="IsEnabled"
+                  Value="True"/>
+        </Style>
+        <Style TargetType="TextBox">
+          <Setter Property="Margin"
+                  Value="2.5"/>
+          <Setter Property="Width"
+                  Value="Auto"/>
+          <Setter Property="HorizontalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="VerticalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="VerticalContentAlignment"
+                  Value="Center"/>
+          <Setter Property="IsEnabled"
+                  Value="True"/>
+          <Setter Property="IsReadOnly"
+                  Value="True"/>
+        </Style>
+        <Style TargetType="Button">
+          <Setter Property="Margin"
+                  Value="2.5"/>
+          <Setter Property="Width"
+              Value="Auto"/>
+          <Setter Property="HorizontalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="VerticalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="VerticalContentAlignment"
+                  Value="Center"/>
+          <Setter Property="IsEnabled"
+                  Value="False"/>
+        </Style>
+      </Grid.Resources>
 
+      <!-- Row 0 -->
+      <!-- MD5 -->
       <Label
         Grid.Row="0"
+        Grid.Column="0"
+        Name="lbl_MD5"
+        Content="MD5"/>
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="1"
+        Name="txt_MD5"
+        xml:space="preserve"/>
+      <Button
+        Grid.Row="0"
+        Grid.Column="2"
+        Name="btn_MD5_Copy"
+        Content="Copy"/>
+
+      <!-- Row 1 -->
+      <!-- Row SHA1 -->
+      <Label
+        Grid.Row="1"
+        Grid.Column="0"
+        Name="lbl_SHA1"
+        Content="SHA1"/>
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="1"
+        Name="txt_SHA1"
+        xml:space="preserve"/>
+      <Button
+        Grid.Row="1"
+        Grid.Column="2"
+        Name="btn_SHA1_Copy"
+        Content="Copy"/>
+
+      <!-- Row 2 -->
+      <!-- Row SHA256 -->
+      <Label
+        Grid.Row="2"
+        Grid.Column="0"
+        Name="lbl_SHA256"
+        Content="SHA256"/>
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="1"
+        Name="txt_SHA256"
+        xml:space="preserve"/>
+      <Button
+        Grid.Row="2"
+        Grid.Column="2"
+        Name="btn_SHA256_Copy"
+        Content="Copy"/>
+
+      <!-- Row 3 -->
+      <!-- Digest -->
+      <Label
+        Grid.Row="3"
+        Grid.Column="0"
+        Name="lbl_Digest"
+        Content="Digest"/>
+      <TextBox
+        Grid.Row="3"
+        Grid.Column="1"
+        Name="txt_Digest"
+        xml:space="preserve"/>
+      <Button
+        Grid.Row="3"
+        Grid.Column="2"
+        Name="btn_Digest_Copy"
+        Content="Copy"/>
+
+      <!-- Row Gridline -->
+      <!-- Row 4 -->
+      <Line
+      Grid.Row="4"
+      Grid.Column="0"
+      Grid.ColumnSpan="3"
+      X1="0"
+      Y1="0"
+      X2="1"
+      Y2="0"
+      Stroke="Black"
+      StrokeThickness="2"
+      Stretch="Uniform"/>
+
+      <!-- Row -->
+      <Label
+        Grid.Row="5"
         Grid.Column="0"
         Name="lbl_ProductName"
-        Margin="5"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        AllowDrop="False"
-        IsEnabled="True">
-        Product Name
-      </Label>
+        Content="Product Name"/>
       <TextBox
-        Grid.Row="0"
+        Grid.Row="5"
         Grid.Column="1"
-        Name="txt_ProductName"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        VerticalContentAlignment="Center"
-        AcceptsReturn="False"
-        AcceptsTab="False"
-        AllowDrop="False"
-        IsEnabled="True"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsReadOnly="True"
-        xml:space="preserve"/>
+        Name="txt_ProductName"/>
       <Button
-        Grid.Row="0"
+        Grid.Row="5"
         Grid.Column="2"
         Name="btn_ProductName_Copy"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Copy"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False"/>
+        Content="Copy"/>
 
+      <!-- Row -->
       <Label
-        Grid.Row="1"
+        Grid.Row="6"
         Grid.Column="0"
         Name="lbl_Manufacturer"
-        Margin="5"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        AllowDrop="False"
-        IsEnabled="True">
-        Manufacturer
-      </Label>
+        Content="Manufacturer"/>
       <TextBox
-        Grid.Row="1"
+        Grid.Row="6"
         Grid.Column="1"
         Name="txt_Manufacture"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        VerticalContentAlignment="Center"
-        AcceptsReturn="False"
-        AcceptsTab="False"
-        AllowDrop="False"
-        IsEnabled="True"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsReadOnly="True"
         xml:space="preserve"/>
       <Button
-        Grid.Row="1"
+        Grid.Row="6"
         Grid.Column="2"
         Name="btn_Manufacture_Copy"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Copy"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False"/>
+        Content="Copy"/>
 
+      <!-- Row -->
       <Label
-        Grid.Row="2"
+        Grid.Row="7"
         Grid.Column="0"
         Name="lbl_ProductVersion"
-        Margin="5"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        AllowDrop="False"
-        IsEnabled="True">
-        Product Version
-      </Label>
+        Content="Product Version"/>
       <TextBox
-        Grid.Row="2"
+        Grid.Row="7"
         Grid.Column="1"
         Name="txt_ProductVersion"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        VerticalContentAlignment="Center"
-        AcceptsReturn="False"
-        AcceptsTab="False"
-        AllowDrop="False"
-        IsEnabled="True"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsReadOnly="True"
         xml:space="preserve"/>
       <Button
-        Grid.Row="2"
+        Grid.Row="7"
         Grid.Column="2"
         Name="btn_ProductVersion_Copy"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Copy"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False"/>
+        Content="Copy"/>
 
+      <!-- Row -->
       <Label
-        Grid.Row="3"
+        Grid.Row="8"
         Grid.Column="0"
         Name="lbl_ProductCode"
-        Margin="5"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        AllowDrop="False"
-        IsEnabled="True">
-        Product Code
-      </Label>
+        Content="Product Code"/>
       <TextBox
-        Grid.Row="3"
+        Grid.Row="8"
         Grid.Column="1"
         Name="txt_ProductCode"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        VerticalContentAlignment="Center"
-        AcceptsReturn="False"
-        AcceptsTab="False"
-        AllowDrop="False"
-        IsEnabled="True"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsReadOnly="True"
         xml:space="preserve"/>
       <Button
-        Grid.Row="3"
+        Grid.Row="8"
         Grid.Column="2"
         Name="btn_ProductCode_Copy"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Copy"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False"/>
+        Content="Copy"/>
 
+      <!-- Row -->
       <Label
-        Grid.Row="4"
+        Grid.Row="9"
         Grid.Column="0"
         Name="lbl_UpgradeCode"
-        Margin="5"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        AllowDrop="False"
-        IsEnabled="True">
-        Upgrade Code
-      </Label>
+        Content="Upgrade Code"/>
       <TextBox
-        Grid.Row="4"
+        Grid.Row="9"
         Grid.Column="1"
         Name="txt_UpgradeCode"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        VerticalContentAlignment="Center"
-        AcceptsReturn="False"
-        AcceptsTab="False"
-        AllowDrop="False"
-        IsEnabled="True"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsReadOnly="True"
         xml:space="preserve"/>
       <Button
-        Grid.Row="4"
+        Grid.Row="9"
         Grid.Column="3"
         Name="btn_UpgradeCode_Copy"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Copy"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False"/>
+        Content="Copy"/>
 
-      <!--
+      <!-- Row -->
       <Button
-        Grid.Row="5"
-        Grid.Column="0"
-        Name="btn_Clear"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Clear File"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False" />
-      -->
-        <Button
-        Grid.Row="5"
+        Grid.Row="10"
         Grid.Column="0"
         Name="btn_AllProperties"
         Margin="5"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
+        VerticalAlignment="Stretch"
         Content="All Properties"
-        MinHeight="32"
-        MaxHeight="32"
         Width="Auto"
-        IsEnabled="False" />
+        IsEnabled="False"/>
       <ListBox
-        Grid.Row="5"
+        Grid.Row="10"
         Grid.Column="1"
         Name="lsbox_File"
         Margin="5"
@@ -316,25 +325,19 @@ Add-Type -AssemblyName System.Windows.Forms
         </ListBox.Items>
       </ListBox>
       <Button
-        Grid.Row="5"
+        Grid.Row="10"
         Grid.Column="3"
         Name="btn_FilePath_Copy"
-        Margin="5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Center"
-        Content="Copy"
-        MinHeight="32"
-        MaxHeight="32"
-        Width="Auto"
-        IsEnabled="False"/>
+        Content="Copy"/>
+
     </Grid>
   </DockPanel>
 </Window>
-"@#>
+"@
 
 # Import XAML
 #[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
-[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
+#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
 
 # Create a new XML node reader for reading the XAML content
 $readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIProperties
@@ -403,8 +406,11 @@ function Enable-AllButtons {
   $btn_ProductCode_Copy.IsEnabled = $true
   $btn_UpgradeCode_Copy.IsEnabled = $true
   $btn_FilePath_Copy.IsEnabled = $true
-  $btn_Clear.IsEnabled = $true
   $btn_AllProperties.IsEnabled = $true
+  $btn_MD5_Copy.IsEnabled = $true
+  $btn_SHA1_Copy.IsEnabled = $true
+  $btn_SHA256_Copy.IsEnabled = $true
+  $btn_Digest_Copy.IsEnabled = $true
 }
 
 function Disable-AllButtons {
@@ -417,6 +423,10 @@ function Disable-AllButtons {
   $btn_FilePath_Copy.IsEnabled = $false
   $btn_Clear.IsEnabled = $false
   $btn_AllProperties.IsEnabled = $false
+  $btn_MD5_Copy.IsEnabled = $false
+  $btn_SHA1_Copy.IsEnabled = $false
+  $btn_SHA256_Copy.IsEnabled = $false
+  $btn_Digest_Copy.IsEnabled = $false
 }
 
 function Clear-Textboxes {
@@ -426,6 +436,39 @@ function Clear-Textboxes {
   $txt_ProductVersion.Clear()
   $txt_ProductCode.Clear()
   $txt_UpgradeCode.Clear()
+}
+
+Function Get-EncodedHash {
+  [CmdletBinding()]
+  Param(
+    [Parameter(Position = 0)]
+    [System.Object]$HashValue
+  )
+
+  $hashBytes = $hashValue.Hash -split '(?<=\G..)(?=.)' | ForEach-Object { [byte]::Parse($_, 'HexNumber') }
+  Return [Convert]::ToBase64String($hashBytes)
+}
+
+function Get-FileHashInformation {
+  param (
+    [Parameter(Mandatory = $true)]
+    [IO.FileInfo[]]$Path
+
+  )
+
+  Write-Host "Getting File Hash Information for: [$Path]"
+  # Get File Hash - MD5
+  $FileHashMD5 = Get-FileHash -Path $Path -Algorithm MD5
+  $txt_MD5.Text = $FileHashMD5.Hash
+  # Get File Hash - SHA1
+  $FileHashSHA1 = Get-FileHash -Path $Path -Algorithm SHA1
+  $txt_SHA1.Text = $FileHashSHA1.Hash
+  # Get File Hash - SHA256
+  $FileHashSHA256 = Get-FileHash -Path $Path -Algorithm SHA256
+  $txt_SHA256.Text = $FileHashSHA256.Hash
+  # Get File Hash - SHA1 - Encoded
+  $FileHashEncoded = Get-EncodedHash -HashValue $FileHashSHA1
+  $txt_Digest.Text = $FileHashEncoded
 }
 
 $formMSIProperties.Add_Loaded({
@@ -454,6 +497,10 @@ $formMSIProperties.Add_Loaded({
       $txt_ProductCode.Text = $FileInfo.ProductCode
       $txt_UpgradeCode.Text = $FileInfo.UpgradeCode
 
+      # Get the File Hash Information
+      Write-Host "In Drop: Getting File Hash Information for: [$filename]"
+      Get-FileHashInformation -Path $FilePath
+
       # Enable the Copy buttons
       Enable-AllButtons
 
@@ -476,6 +523,10 @@ $lsbox_File.Add_Drop({
       $txt_ProductVersion.Text = $FileInfo.ProductVersion
       $txt_ProductCode.Text = $FileInfo.ProductCode
       $txt_UpgradeCode.Text = $FileInfo.UpgradeCode
+
+      # Get the File Hash Information
+      Write-Host "In Drop: Getting File Hash Information for: [$filename]"
+      Get-FileHashInformation -Path $filename
 
       # Enable the Copy buttons
       Enable-AllButtons
@@ -502,7 +553,7 @@ $lsbox_File.Add_DragOver({
       }
     }
   })
-
+<#
 $btn_Clear.add_Click({
     # Loop through all items and remove from the listbox
     for ($i = ($lsbox_File.Items.Count); $i -ge 0; $i--) {
@@ -515,7 +566,7 @@ $btn_Clear.add_Click({
     # Disable the Copy buttons
     Disable-AllButtons
   })
-
+#>
 $btn_ProductName_Copy.add_Click({
     [System.Windows.Forms.Clipboard]::SetText($txt_ProductName.Text)
   })
@@ -534,6 +585,22 @@ $btn_ProductCode_Copy.add_Click({
 
 $btn_UpgradeCode_Copy.add_Click({
     [System.Windows.Forms.Clipboard]::SetText($txt_UpgradeCode.Text)
+  })
+
+$btn_MD5_Copy.add_Click({
+    [System.Windows.Forms.Clipboard]::SetText($txt_MD5.Text)
+  })
+
+$btn_SHA1_Copy.add_Click({
+    [System.Windows.Forms.Clipboard]::SetText($txt_SHA1.Text)
+  })
+
+$btn_SHA256_Copy.add_Click({
+    [System.Windows.Forms.Clipboard]::SetText($txt_SHA256.Text)
+  })
+
+$btn_Digest_Copy.add_Click({
+    [System.Windows.Forms.Clipboard]::SetText($txt_Digest.Text)
   })
 
 $btn_AllProperties.add_Click({
