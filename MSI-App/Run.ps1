@@ -32,7 +32,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 
 # Build the GUI
-[xml]$XAMLformMSIProperties = @"
+<#[xml]$XAMLformMSIProperties = @"
 <Window
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -330,11 +330,11 @@ Add-Type -AssemblyName System.Windows.Forms
     </Grid>
   </DockPanel>
 </Window>
-"@
+"@#>
 
 # Import XAML
 #[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\windows.xaml
-#[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
+[xml]$XAMLformMSIProperties = Get-Content -Path $PSScriptRoot\MSIProperties.xaml
 
 # Create a new XML node reader for reading the XAML content
 $readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIProperties
