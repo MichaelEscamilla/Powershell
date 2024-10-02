@@ -13,11 +13,19 @@ Optional parameter to specify the path of the MSI file to automatically load the
 .NOTES
 Author: Michael Escamilla
 Date: 9-30-2024
+
+Version History:
+1.0.0.0 - Initial release
+2.0.0.0 - Added file hash information, and context menu items for the installation and uninstallation of a Right-Click Option in Windows Explorer.
 #>
+
 param (
   [Parameter(Mandatory = $false)]
   [string]$FilePath
 )
+
+# Script Version
+[System.Version]$ScriptVersion = "2.0.0.0"
 
 # Check if the script is running as administrator
 $Global:currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -29,7 +37,6 @@ if (($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adminis
 # Load Assemblies
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-
 
 # Build the GUI
 [xml]$XAMLformMSIProperties = @"
@@ -56,6 +63,9 @@ Add-Type -AssemblyName System.Windows.Forms
                   Header="GitHub - GetMSIInformation"/>
         <MenuItem Name="MenuItem_About"
                   Header="michaeltheadmin.com"/>
+        <MenuItem Name="MenuItem_Version"
+                  Header="Version 1.0.0"
+                  IsEnabled="False" />
       </MenuItem>
     </Menu>
 
@@ -309,7 +319,7 @@ Add-Type -AssemblyName System.Windows.Forms
       <ListBox
         Grid.Row="10"
         Grid.Column="1"
-        Name="lsbox_File"
+        Name="lsbox_FilePath"
         Margin="5"
         HorizontalAlignment="Stretch"
         HorizontalContentAlignment="Center"
@@ -345,11 +355,13 @@ $readerformMSIProperties = New-Object System.Xml.XmlNodeReader $XAMLformMSIPrope
 # Load the XAML content into a WPF window object using the XAML reader
 [System.Windows.Window]$formMSIProperties = [Windows.Markup.XamlReader]::Load($readerformMSIProperties)
 
-# This script selects all XML nodes with a "Name" attribute from the $XAMLformMSIProperties object.
-# For each selected node, it creates a PowerShell variable with the same name as the node's "Name" attribute.
-# The value of the created variable is set to the result of the FindName method called on the $formMSIProperties object, using the node's "Name" attribute as the parameter.
+# Create Variables for all the controls in the XAML form
 $XAMLformMSIProperties.SelectNodes("//*[@Name]") | ForEach-Object { Set-Variable -Name ($_.Name) -Value $formMSIProperties.FindName($_.Name) -Scope Global }
 
+#############################################
+################# Functions #################
+#############################################
+#region Functions
 function Get-MsiProperties {
   param (
     [Parameter(Mandatory = $true)]
@@ -376,8 +388,8 @@ function Get-MsiProperties {
   # Fetch the first record from the result set
   $MSIRecord = $MSIPropertyView.GetType().InvokeMember("Fetch", "InvokeMethod", $null, $MSIPropertyView, $null)
 	
-  # Initialize an empty hashtable to store properties
-  $Properties = @{}
+  # Initialize an empty System Object to store properties
+  [System.Object]$Properties = @{}
 	
   # Loop through all records in the result set
   while ($null -ne $MSIRecord) {
@@ -394,50 +406,38 @@ function Get-MsiProperties {
     $MSIRecord = $MSIPropertyView.GetType().InvokeMember("Fetch", "InvokeMethod", $null, $MSIPropertyView, $null)
   }
 	
-  # Return the hashtable of properties
+  # Return the System Object of properties
   $Properties
 }
 
 function Enable-AllButtons {
-  # Enable the Copy buttons
-  $btn_ProductName_Copy.IsEnabled = $true
-  $btn_Manufacture_Copy.IsEnabled = $true
-  $btn_ProductVersion_Copy.IsEnabled = $true
-  $btn_ProductCode_Copy.IsEnabled = $true
-  $btn_UpgradeCode_Copy.IsEnabled = $true
-  $btn_FilePath_Copy.IsEnabled = $true
-  $btn_AllProperties.IsEnabled = $true
-  $btn_MD5_Copy.IsEnabled = $true
-  $btn_SHA1_Copy.IsEnabled = $true
-  $btn_SHA256_Copy.IsEnabled = $true
-  $btn_Digest_Copy.IsEnabled = $true
+  # Get all button variables
+  $Buttons = Get-Variable -Name "btn_*" -ValueOnly -ErrorAction SilentlyContinue
+  foreach ($Button in $Buttons) {
+    # Enable Button
+    $Button.IsEnabled = $true
+  }
 }
 
 function Disable-AllButtons {
-  # Disable the Copy buttons
-  $btn_ProductName_Copy.IsEnabled = $false
-  $btn_Manufacture_Copy.IsEnabled = $false
-  $btn_ProductVersion_Copy.IsEnabled = $false
-  $btn_ProductCode_Copy.IsEnabled = $false
-  $btn_UpgradeCode_Copy.IsEnabled = $false
-  $btn_FilePath_Copy.IsEnabled = $false
-  $btn_Clear.IsEnabled = $false
-  $btn_AllProperties.IsEnabled = $false
-  $btn_MD5_Copy.IsEnabled = $false
-  $btn_SHA1_Copy.IsEnabled = $false
-  $btn_SHA256_Copy.IsEnabled = $false
-  $btn_Digest_Copy.IsEnabled = $false
+  # Get all button variables
+  $Buttons = Get-Variable -Name "btn_*" -ValueOnly -ErrorAction SilentlyContinue
+  foreach ($Button in $Buttons) {
+    # Disable Button
+    $Button.IsEnabled = $false
+  }
 }
 
 function Clear-Textboxes {
-  # Clear all textboxes
-  $txt_ProductName.Clear()
-  $txt_Manufacture.Clear()
-  $txt_ProductVersion.Clear()
-  $txt_ProductCode.Clear()
-  $txt_UpgradeCode.Clear()
+  # Get all textbox variables
+  $Textboxes = Get-Variable -Name "txt_*" -ValueOnly -ErrorAction SilentlyContinue
+  foreach ($Textbox in $Textboxes) {
+    # Disable Button
+    $Textbox.Clear()
+  }
 }
 
+# Stolen from: https://github.com/PatchMyPCTeam/CustomerTroubleshooting/blob/Release/PowerShell/Get-LocalContentHashes.ps1
 Function Get-EncodedHash {
   [CmdletBinding()]
   Param(
@@ -457,87 +457,120 @@ function Get-FileHashInformation {
   )
 
   Write-Host "Getting File Hash Information for: [$Path]"
+
+  # Initialize the hash object
+  $Hashes = @{}
+
   # Get File Hash - MD5
   $FileHashMD5 = Get-FileHash -Path $Path -Algorithm MD5
-  $txt_MD5.Text = $FileHashMD5.Hash
+  $Hashes["MD5"] = $FileHashMD5
+
   # Get File Hash - SHA1
   $FileHashSHA1 = Get-FileHash -Path $Path -Algorithm SHA1
-  $txt_SHA1.Text = $FileHashSHA1.Hash
+  $Hashes["SHA1"] = $FileHashSHA1
+
   # Get File Hash - SHA256
   $FileHashSHA256 = Get-FileHash -Path $Path -Algorithm SHA256
-  $txt_SHA256.Text = $FileHashSHA256.Hash
+  $Hashes["SHA256"] = $FileHashSHA256
+
   # Get File Hash - SHA1 - Encoded
   $FileHashEncoded = Get-EncodedHash -HashValue $FileHashSHA1
-  $txt_Digest.Text = $FileHashEncoded
+  $Hashes["Digest"] = $FileHashEncoded
+
+  # Return the hash object
+  $Hashes
 }
 
+function Set-TextboxInformation {
+  param (
+    [Parameter(Mandatory = $true)]
+    [System.Object]$MSIPropertiesInfo,
+    [Parameter(Mandatory = $true)]
+    [hashtable]$FileHashInfo
+  )
+
+  # Set the MSI file properties textboxes
+  $txt_ProductName.Text = $MSIPropertiesInfo.ProductName
+  $txt_Manufacture.Text = $MSIPropertiesInfo.Manufacturer
+  $txt_ProductVersion.Text = $MSIPropertiesInfo.ProductVersion
+  $txt_ProductCode.Text = $MSIPropertiesInfo.ProductCode
+  $txt_UpgradeCode.Text = $MSIPropertiesInfo.UpgradeCode
+
+  # Set the File Hash Information textboxes
+  $txt_MD5.Text = $FileHashInfo.MD5.Hash
+  $txt_SHA1.Text = $FileHashInfo.SHA1.Hash
+  $txt_SHA256.Text = $FileHashInfo.SHA256.Hash
+  $txt_Digest.Text = $FileHashInfo.Digest
+}
+#endregion Functions
+
+#############################################
+############## Event Handlers ###############
+#############################################
+#region Event Handlers
+
+#### Form Load #####
 $formMSIProperties.Add_Loaded({
     # Check if the script is running as an administrator
     if (($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
       # Clear the listbox
-      $lsbox_File.Items.Clear()
+      $lsbox_FilePath.Items.Clear()
 
       # Add a warning message to the listbox
-      $lsbox_File.Items.Add("WARNING: Running as Administrator | Drag and Drop will not work.")
+      $lsbox_FilePath.Items.Add("WARNING: Running as Administrator | Drag and Drop will not work.")
 
       # Make the warning message bold and yellow
-      $lsbox_File.Background = [System.Windows.Media.Brushes]::Yellow
-      $lsbox_File.FontWeight = 'Bold'
+      $lsbox_FilePath.Background = [System.Windows.Media.Brushes]::Yellow
+      $lsbox_FilePath.FontWeight = 'Bold'
     }
 
-    # Check if the FilePath parameter is provided
+    # Update Version Information
+    $formMSIProperties.Title = "MSI Properties - Version $($ScriptVersion)"
+    $MenuItem_Version.Header = "Version $($ScriptVersion)"
+
+    # Check if the FilePath parameter is provided to script
     if ($FilePath) {
       # Get the MSI file properties
-      $FileInfo = Get-MsiProperties -Path $FilePath
-
-      # Populate the textboxes with the MSI file properties
-      $txt_ProductName.Text = $FileInfo.ProductName
-      $txt_Manufacture.Text = $FileInfo.Manufacturer
-      $txt_ProductVersion.Text = $FileInfo.ProductVersion
-      $txt_ProductCode.Text = $FileInfo.ProductCode
-      $txt_UpgradeCode.Text = $FileInfo.UpgradeCode
+      $FileMSIInfo = Get-MsiProperties -Path $FilePath
 
       # Get the File Hash Information
-      Write-Host "In Drop: Getting File Hash Information for: [$filename]"
-      Get-FileHashInformation -Path $FilePath
+      $HashInfo = Get-FileHashInformation -Path $FilePath
+
+      # Populate the textboxes
+      Set-TextboxInformation -MSIPropertiesInfo $FileMSIInfo -FileHashInfo $HashInfo
 
       # Enable the Copy buttons
       Enable-AllButtons
 
       # Clear the listbox and add the filename
-      $lsbox_File.Items.Clear()
-      $lsbox_File.Items.Add($FilePath)
+      $lsbox_FilePath.Items.Clear()
+      $lsbox_FilePath.Items.Add($FilePath)
     }
   })
 
-$lsbox_File.Add_Drop({
+#### Listbox Drag and Drop ####
+$lsbox_FilePath.Add_Drop({
     $filename = $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)
     if ($filename) {
       # Get the MSI file properties
-      #$FileInfo = Get-MsiDatabaseProperties -FilePath $filename
-      $FileInfo = Get-MsiProperties -Path $filename
-
-      # Populate the textboxes with the MSI file properties
-      $txt_ProductName.Text = $FileInfo.ProductName
-      $txt_Manufacture.Text = $FileInfo.Manufacturer
-      $txt_ProductVersion.Text = $FileInfo.ProductVersion
-      $txt_ProductCode.Text = $FileInfo.ProductCode
-      $txt_UpgradeCode.Text = $FileInfo.UpgradeCode
+      $FileMSIInfo = Get-MsiProperties -Path $filename
 
       # Get the File Hash Information
-      Write-Host "In Drop: Getting File Hash Information for: [$filename]"
-      Get-FileHashInformation -Path $filename
+      $HashInfo = Get-FileHashInformation -Path $filename
+
+      # Populate the textboxes
+      Set-TextboxInformation -MSIPropertiesInfo $FileMSIInfo -FileHashInfo $HashInfo
 
       # Enable the Copy buttons
       Enable-AllButtons
 
       # Clear the listbox and add the filename
-      $lsbox_File.Items.Clear()
-      $lsbox_File.Items.Add($filename[0])
+      $lsbox_FilePath.Items.Clear()
+      $lsbox_FilePath.Items.Add($filename[0])
     }
   })
 
-$lsbox_File.Add_DragOver({
+$lsbox_FilePath.Add_DragOver({
     # Check if the dragged data contains file drop data
     if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) {
       foreach ($File in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) {
@@ -553,75 +586,8 @@ $lsbox_File.Add_DragOver({
       }
     }
   })
-<#
-$btn_Clear.add_Click({
-    # Loop through all items and remove from the listbox
-    for ($i = ($lsbox_File.Items.Count); $i -ge 0; $i--) {
-      $CurrentItem = $lsbox_File.Items[$i]
-      $lsbox_File.Items.Remove($CurrentItem)
-    }
-    # Clear all textboxes
-    Clear-Textboxes
 
-    # Disable the Copy buttons
-    Disable-AllButtons
-  })
-#>
-$btn_ProductName_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_ProductName.Text)
-  })
-
-$btn_Manufacture_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_Manufacturer.Text)
-  })
-
-$btn_ProductVersion_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_ProductVersion.Text)
-  })
-
-$btn_ProductCode_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_ProductCode.Text)
-  })
-
-$btn_UpgradeCode_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_UpgradeCode.Text)
-  })
-
-$btn_MD5_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_MD5.Text)
-  })
-
-$btn_SHA1_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_SHA1.Text)
-  })
-
-$btn_SHA256_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_SHA256.Text)
-  })
-
-$btn_Digest_Copy.add_Click({
-    [System.Windows.Forms.Clipboard]::SetText($txt_Digest.Text)
-  })
-
-$btn_AllProperties.add_Click({
-    $SelectedProperty = Get-MsiProperties -Path $lsbox_File.Items[0] | Out-GridView -Title "MSI Database Properties for $($lsbox_File.Items[0])" -OutputMode Single
-    $SelectedProperty.Value | Set-Clipboard
-  })
-
-$btn_FilePath_Copy.add_Click({
-    # Check if the item in the listbox contains spaces
-    if ($lsbox_File.Items[0] -match "\s") {
-      # Copy the item in the listbox to the clipboard with quotes
-      [System.Windows.Forms.Clipboard]::SetText("`"$($lsbox_File.Items[0])`"")
-      Write-Host "Copied to Clipboard: [`"$($lsbox_File.Items[0])`"]"
-    }
-    else {
-      # Copy the item in the listbox to the clipboard without quotes
-      [System.Windows.Forms.Clipboard]::SetText($lsbox_File.Items[0])
-      Write-Host "Copied to Clipboard: [$($lsbox_File.Items[0])]"
-    }
-  })
-
+#### Menu Items ####  
 $MenuItem_Install.add_Click({
     Write-Host "Menu Item Install Clicked"
     # Set Script Name
@@ -698,7 +664,7 @@ $MenuItem_Uninstall.add_Click({
     # Reg2CI (c) 2020 by Roger Zander
     # https://github.com/asjimene/GetMSIInfo/blob/master/GetMSIInfo.ps1
 
-  
+
     Write-Output "Cleaning Up Registry"
     # Remove the 'Get MSI Information' registry key if it exists
     if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -eq $true) { 
@@ -717,6 +683,62 @@ $MenuItem_Uninstall.add_Click({
 
     Write-Output "Uninstallation Complete!"
   })
+
+$MenuItem_GitHub.add_Click({
+    # Open Github Project Page
+    Start-Process "https://github.com/MichaelEscamilla/GetMSIInformation"
+  })
+
+$MenuItem_About.add_Click({
+    # Open Blog
+    Start-Process "https://michaeltheadmin.com"
+  })
+
+#### Button Handlers ####
+$btn_AllProperties.add_Click({
+    $SelectedProperty = Get-MsiProperties -Path $lsbox_FilePath.Items[0] | Out-GridView -Title "MSI Database Properties for $($lsbox_FilePath.Items[0])" -OutputMode Single
+    $SelectedProperty.Value | Set-Clipboard
+  })
+
+$Button_Copy_Handler = {
+  # Get the button name
+  $ButtonName = $_.Source.Name
+  # Get the property name from the button name by parsing between the underscores
+  $PropertyName = [regex]::Match($ButtonName, "_(.*?)_").Groups[1].Value
+  # Get the variable for the textbox with the same name as the property name
+  $TextboxVariable = Get-Variable -Name "txt_$($propertyName)" -ValueOnly -ErrorAction SilentlyContinue
+  if ($TextboxVariable) {
+    Write-Host "Textbox Variable: [$($TextboxVariable)]"
+    # Copy the text from the textbox with the same name as the property name
+    [System.Windows.Forms.Clipboard]::SetText($TextboxVariable.Text)
+  }
+  else {
+    # Try getting a Listbox variable with the same name as the property name
+    $ListboxVariable = Get-Variable -Name "lsbox_$($propertyName)" -ValueOnly -ErrorAction SilentlyContinue
+    if ($ListboxVariable) {
+      # Check if the item in the listbox contains spaces
+      if ($lsbox_FilePath.Items[0] -match "\s") {
+        # Copy the item in the listbox to the clipboard with quotes
+        [System.Windows.Forms.Clipboard]::SetText("`"$($lsbox_FilePath.Items[0])`"")
+        Write-Host "Copied to Clipboard: [`"$($lsbox_FilePath.Items[0])`"]"
+      }
+      else {
+        # Copy the item in the listbox to the clipboard without quotes
+        [System.Windows.Forms.Clipboard]::SetText($lsbox_FilePath.Items[0])
+        Write-Host "Copied to Clipboard: [$($lsbox_FilePath.Items[0])]"
+      }
+    }
+  }
+}
+
+# Get all button variables that contain the word "Copy"
+$Buttons = Get-Variable -Name "*Copy" -ValueOnly -ErrorAction SilentlyContinue
+foreach ($Button in $Buttons) {
+  # Add a click event handler to the button
+  $Button.add_Click($Button_Copy_Handler)
+}
+
+#endregion Event Handlers
 
 #Show the WPF Window
 $formMSIProperties.WindowStartupLocation = "CenterScreen"
