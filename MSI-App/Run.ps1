@@ -24,8 +24,15 @@ param (
   [string]$FilePath
 )
 
+#############################################
+################# Variables #################
+#############################################
+# Script Name
+$ScriptName = "Get MSI Information"
 # Script Version
 [System.Version]$ScriptVersion = "2.0.0.0"
+# Right-Click Menu Name
+$RightClickMenuName = "Get MSI Information"
 
 # Check if the script is running as administrator
 $Global:currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -65,7 +72,7 @@ Add-Type -AssemblyName System.Windows.Forms
                   Header="michaeltheadmin.com"/>
         <MenuItem Name="MenuItem_Version"
                   Header="Version 1.0.0"
-                  IsEnabled="False" />
+                  IsEnabled="False"/>
       </MenuItem>
     </Menu>
 
@@ -123,7 +130,7 @@ Add-Type -AssemblyName System.Windows.Forms
           <Setter Property="Margin"
                   Value="2.5"/>
           <Setter Property="Width"
-              Value="Auto"/>
+                  Value="Auto"/>
           <Setter Property="HorizontalAlignment"
                   Value="Stretch"/>
           <Setter Property="VerticalAlignment"
@@ -132,6 +139,18 @@ Add-Type -AssemblyName System.Windows.Forms
                   Value="Center"/>
           <Setter Property="IsEnabled"
                   Value="False"/>
+        </Style>
+        <Style TargetType="ListBoxItem">
+          <Setter Property="HorizontalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="HorizontalContentAlignment"
+                  Value="Center"/>
+          <Setter Property="VerticalAlignment"
+                  Value="Stretch"/>
+          <Setter Property="VerticalContentAlignment"
+                  Value="Center"/>
+          <Setter Property="Height"
+                  Value="{Binding ElementName=lsbox_FilePath, Path=ActualHeight}"/>
         </Style>
       </Grid.Resources>
 
@@ -210,16 +229,16 @@ Add-Type -AssemblyName System.Windows.Forms
       <!-- Row Gridline -->
       <!-- Row 4 -->
       <Line
-      Grid.Row="4"
-      Grid.Column="0"
-      Grid.ColumnSpan="3"
-      X1="0"
-      Y1="0"
-      X2="1"
-      Y2="0"
-      Stroke="Black"
-      StrokeThickness="2"
-      Stretch="Uniform"/>
+        Grid.Row="4"
+        Grid.Column="0"
+        Grid.ColumnSpan="3"
+        X1="0"
+        Y1="0"
+        X2="1"
+        Y2="0"
+        Stroke="Black"
+        StrokeThickness="2"
+        Stretch="Uniform"/>
 
       <!-- Row -->
       <Label
@@ -591,7 +610,7 @@ $lsbox_FilePath.Add_DragOver({
 $MenuItem_Install.add_Click({
     Write-Host "Menu Item Install Clicked"
     # Set Script Name
-    $SaveAsScriptName = "GetMSIInformation.ps1"
+    $SaveAsScriptName = $ScriptName
 
     # Create a new directory in the LOCALAPPDATA folder
     Write-Host "Creating GetMSIInformation folder in LOCALAPPDATA folder"
@@ -637,20 +656,23 @@ $MenuItem_Install.add_Click({
     }
 
     # Check if the 'Get MSI Information' subkey exists under 'shell', if not, create it.
-    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -ne $true) {
-      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information" -Force -ErrorAction SilentlyContinue 
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName") -ne $true) {
+      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName" -Force -ErrorAction SilentlyContinue 
     }
 
+    # Set the 'icon' value under 'Get MSI Information' to a powershell.exe icon
+    New-ItemProperty -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName" -Name 'icon' -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force -ErrorAction SilentlyContinue
+
     # Check if the 'command' subkey exists under 'Get MSI Information', if not, create it.
-    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command") -ne $true) {
-      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command" -Force -ErrorAction SilentlyContinue 
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName\command") -ne $true) {
+      New-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName\command" -Force -ErrorAction SilentlyContinue 
     }
 
     # Set the default value of the 'Get MSI Information' key to "Get MSI Information".
-    New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information' -Name '(default)' -Value "Get MSI Information" -PropertyType String -Force -ea SilentlyContinue;
+    New-ItemProperty -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName" -Name '(default)' -Value "$RightClickMenuName" -PropertyType String -Force -ea SilentlyContinue;
 
     # Set the default value of the 'command' key to execute a PowerShell script with the .msi file as an argument.
-    New-ItemProperty -LiteralPath 'HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information\command' -Name '(default)' -Value "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$($DestinationFolder.FullName)\$($SaveAsScriptName)`" -FilePath '%1'" -PropertyType String -Force -ErrorAction SilentlyContinue;
+    New-ItemProperty -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName\command" -Name '(default)' -Value "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$($DestinationFolder.FullName)\$($SaveAsScriptName)`" -FilePath '%1'" -PropertyType String -Force -ErrorAction SilentlyContinue;
     Write-Host "Installation Complete"
   })
 
@@ -667,18 +689,8 @@ $MenuItem_Uninstall.add_Click({
 
     Write-Output "Cleaning Up Registry"
     # Remove the 'Get MSI Information' registry key if it exists
-    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information") -eq $true) { 
-      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\Get MSI Information" -force -Recurse -ea SilentlyContinue 
-    }
-
-    # Remove the 'shell' registry key if it exists
-    if ([System.String]::IsNullOrEmpty((Get-ChildItem "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell"))) {
-      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell" -force -Recurse -ea SilentlyContinue 
-    }
-
-    # Remove the '.msi' file associations exists registry key if it is exists
-    if ([System.String]::IsNullOrEmpty((Get-ChildItem "HKCU:\Software\Classes\SystemFileAssociations\.msi"))) {
-      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi" -force -Recurse -ea SilentlyContinue 
+    if ((Test-Path -LiteralPath "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName") -eq $true) { 
+      Remove-Item "HKCU:\Software\Classes\SystemFileAssociations\.msi\shell\$RightClickMenuName" -force -Recurse -ea SilentlyContinue 
     }
 
     Write-Output "Uninstallation Complete!"
@@ -708,7 +720,7 @@ $Button_Copy_Handler = {
   # Get the variable for the textbox with the same name as the property name
   $TextboxVariable = Get-Variable -Name "txt_$($propertyName)" -ValueOnly -ErrorAction SilentlyContinue
   if ($TextboxVariable) {
-    Write-Host "Textbox Variable: [$($TextboxVariable)]"
+    Write-Host "Textbox [$($TextboxVariable.Name)] Value Copied to Clipboard : [$($TextboxVariable.Text)]"
     # Copy the text from the textbox with the same name as the property name
     [System.Windows.Forms.Clipboard]::SetText($TextboxVariable.Text)
   }
