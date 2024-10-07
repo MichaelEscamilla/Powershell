@@ -12,7 +12,7 @@ function Build-LabADObjects {
     )
 
     process {
-        # Create the Organizational Unit
+        #region Create the Organizational Unit
         try {
             $existingOU = Get-ADOrganizationalUnit -Filter { Name -eq $OUName } -ErrorAction SilentlyContinue
 
@@ -31,8 +31,9 @@ function Build-LabADObjects {
         catch {
             Write-Error "Failed to create Organizational Unit: $_"
         }
+        #endregion
 
-        # Create the Groups
+        #region Create the Groups
         try {
             $groups = @(
                 @{ Name = "CM_Servers"; Description = "Configuration Manager Servers" },
@@ -67,8 +68,9 @@ function Build-LabADObjects {
         catch {
             Write-Error "Failed to create Groups: $_"
         }
+        #endregion
 
-        # Create the Users Accounts
+        #region Create the Users Accounts
         try {
             $users = @(
                 @{ Name = "CMAdmin"; Description = "Configuration Manager Admin" },
@@ -108,5 +110,34 @@ function Build-LabADObjects {
         catch {
             Write-Error "Failed to create User accounts: $_"
         }
+        #endregion
+
+        #region Create the Group Policies
+        $GroupPolicies = @(
+            @{ Name = "Domain Machine Policy"; Description = "Applies to all Machines in Domain" },
+            @{ Name = "ConfigMgr Servers"; Description = "Configuration Manager Servers" },
+            @{ Name = "All Servers"; Description = "Applies to all Servers in Domain" },
+            @{ Name = "All Workstations"; Description = "Workstation Client Push Account" }
+        )
+
+        foreach ($GroupPolicy in $GroupPolicies) {
+            $GroupPolicyName = $GroupPolicy.Name
+            $GroupPolicyDescription = $GroupPolicy.Description
+
+            # Check if the Group Policy already exists using the DisplayName
+            $existingGroupPolicy = Get-GPO -All | Where-Object { $_.DisplayName -eq $GroupPolicyName }
+
+            if ($existingGroupPolicy) {
+                # Update the description if the Group Policy exists
+                #Set-GPO -Name $GroupPolicyName -Description $GroupPolicyDescription -ErrorAction Stop
+                Write-Output "Group Policy '$GroupPolicyName' already exists. Updating Information"
+            }
+            else {
+                #New-GPO -Name $GroupPolicyName -Description $GroupPolicyDescription -ErrorAction Stop
+                Write-Output "Group Policy '$GroupPolicyName' with description '$GroupPolicyDescription' created successfully."
+            }
+        }
+        # Get-GPOReport to export current GPO settings
+        #endregion
     }
 }
