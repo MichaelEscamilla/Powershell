@@ -125,16 +125,16 @@ function Build-LabADObjects {
             $GroupPolicyDescription = $GroupPolicy.Description
 
             # Check if the Group Policy already exists using the DisplayName
-            $existingGroupPolicy = Get-GPO -All | Where-Object { $_.DisplayName -eq $GroupPolicyName }
+            $existingGroupPolicy = Get-GPO -All | Where-Object { $_.DisplayName -eq "$($GroupPolicy.Name)" }
 
             if ($existingGroupPolicy) {
                 # Update the description if the Group Policy exists
-                #Set-GPO -Name $GroupPolicyName -Description $GroupPolicyDescription -ErrorAction Stop
-                Write-Output "Group Policy '$GroupPolicyName' already exists. Updating Information"
+                Set-GPO -Name $GroupPolicy.Name -Comment $GroupPolicy.Description -ErrorAction Stop
+                Write-Output "Group Policy '$($GroupPolicy.Name)' already exists. Updating Information"
             }
             else {
-                #New-GPO -Name $GroupPolicyName -Description $GroupPolicyDescription -ErrorAction Stop
-                Write-Output "Group Policy '$GroupPolicyName' with description '$GroupPolicyDescription' created successfully."
+                New-GPO -Name $GroupPolicy.Name -Comment $GroupPolicy.Description -ErrorAction Stop
+                Write-Output "Group Policy '$($GroupPolicy.Name)' with description '$($GroupPolicy.Description)' created successfully."
             }
         }
         # Get-GPOReport to export current GPO settings
