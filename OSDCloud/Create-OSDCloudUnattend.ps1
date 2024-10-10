@@ -37,7 +37,7 @@ if ($TSEnviornment) {
     #region Create the Group Policies
     $TSVariables = @(
         @{ Name = "OSArchitecture"; Value = "X64" },
-        @{ Name = "COSDAnswerFilePath"; Value = "C:\WINDOWS\panther\unattend\unattend.xml" },
+        @{ Name = "OSDAnswerFilePath"; Value = "C:\WINDOWS\panther\unattend\unattend.xml" },
         @{ Name = "OSDInstallType"; Value = "Sysprep" },
         @{ Name = "OSDTargetSystemRoot"; Value = "C:\WINDOWS" },
         @{ Name = "OSVersionNumber"; Value = "10.0" },
