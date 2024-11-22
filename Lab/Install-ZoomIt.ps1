@@ -1,7 +1,8 @@
 param (
-    [switch]$RunOnStartup = $true,
-    [switch]$AcceptEULA = $true,
-    [switch]$HideTrayIcon = $true,
+    [switch]$RunOnStartup,
+    [switch]$AcceptEULA,
+    [switch]$HideTrayIcon,
+    [switch]$HideFirstRun,
     [ValidateSet("x64", "x86")]
     [string]$Architecture = "x64"
 )
@@ -19,26 +20,15 @@ $FileName = $DownloadURL.Split("/")[-1]
 ### Set Save Path
 $SavePath = [Environment]::GetFolderPath('MyDocuments')
 
-
 ### Combine Save Path and File Name
 $SaveFile = Join-Path -Path $SavePath -ChildPath $FileName
 
 ### Download ZoomIt
-Invoke-WebRequest -Uri $DownloadURL -OutFile $SaveFile
-
-### Run On Startup via Registry
-if ($RunOnStartup) {
-    # Define the registry path for startup programs
-    $RegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-    
-    # Define the registry entry name for ZoomIt
-    $RegName = "ZoomIt"
-    
-    # Define the registry entry value as the path to the ZoomIt executable
-    $RegValue = $SaveFile
-    
-    # Create or update the registry entry to run ZoomIt on startup
-    New-ItemProperty -Path $RegPath -Name $RegName -Value $RegValue -PropertyType String -Force | Out-Null
+try{
+    Invoke-WebRequest -Uri $DownloadURL -OutFile $SaveFile -ErrorAction Stop
+} catch {
+    Write-Error "Failed to download ZoomIt from $DownloadURL"
+    exit 1
 }
 
 ### Create Accept EULA Registry Key if AcceptEULA switch is set
@@ -61,6 +51,26 @@ if ($AcceptEULA -or $HideTrayIcon) {
     New-ItemProperty -Path $RegPath -Name $RegName -Value $RegValue -PropertyType DWord -Force | Out-Null
 }
 
+### Hide First Run
+if ($HideFirstRun) {
+    # Define the registry path for ZoomIt settings
+    $RegPath = "HKCU:\Software\Sysinternals\ZoomIt"
+    
+    # Define the registry entry name for first run
+    $RegName = "OptionsShown"
+    
+    # Define the registry entry value to indicate first run has been completed
+    $RegValue = "1"
+    
+    # Create the registry path if it doesn't exist
+    if (-not (Test-Path $RegPath)) {
+        New-Item -Path $RegPath -Force | Out-Null
+    }
+    
+    # Create or update the registry entry to indicate first run has been completed
+    New-ItemProperty -Path $RegPath -Name $RegName -Value $RegValue -PropertyType DWord -Force | Out-Null
+}
+
 ### Remove from System Tray
 if ($HideTrayIcon) {
     # Define the registry path for ZoomIt settings
@@ -79,4 +89,19 @@ if ($HideTrayIcon) {
     
     # Create or update the registry entry to hide the system tray icon
     New-ItemProperty -Path $RegPath -Name $RegName -Value $RegValue -PropertyType DWord -Force | Out-Null
+}
+
+### Run On Startup via Registry
+if ($RunOnStartup) {
+    # Define the registry path for startup programs
+    $RegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+    
+    # Define the registry entry name for ZoomIt
+    $RegName = "ZoomIt"
+    
+    # Define the registry entry value as the path to the ZoomIt executable
+    $RegValue = $SaveFile
+    
+    # Create or update the registry entry to run ZoomIt on startup
+    New-ItemProperty -Path $RegPath -Name $RegName -Value $RegValue -PropertyType String -Force | Out-Null
 }
