@@ -42,7 +42,7 @@ if ($RunOnStartup) {
 }
 
 ### Create Accept EULA Registry Key if AcceptEULA switch is set
-if ($AcceptEULA) {
+if ($AcceptEULA -or $HideTrayIcon) {
     # Define the registry path for ZoomIt settings
     $RegPath = "HKCU:\Software\Sysinternals\ZoomIt"
     
