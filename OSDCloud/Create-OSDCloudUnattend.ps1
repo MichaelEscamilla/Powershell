@@ -138,5 +138,5 @@ $XMLUnattend.Save($XMLTextWriter)
 $XMLTextWriter.Close()
 
 if (Test-Path -Path "$UnattendFilePath") {
-    Write-CMTraceLog -Message "Successfully Created Unattend File: [$($UnattendFilePath)]" -Type 1
+    Write-Output "Successfully Created Unattend File: [$($UnattendFilePath)]"
 }
