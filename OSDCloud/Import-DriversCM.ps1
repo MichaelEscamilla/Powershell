@@ -3,7 +3,9 @@ function Import-DriversCM {
     [CmdletBinding()]
     param(
         [parameter(Mandatory = $false)]
-        [string]$SiteCode = "$((Get-PSDrive -PSProvider CMSite).Name)"
+        [string]$SiteCode = "$((Get-PSDrive -PSProvider CMSite).Name)",
+        [parameter(Mandatory = $false)]
+        [string]$SourcePath = "\\MEMCM-Dev\Source$\Drivers"
     )
 
     # Import the Configuration Manager module
@@ -18,11 +20,10 @@ function Import-DriversCM {
     #=================================================
     #   Create Source Directory for OpenOSD WinPEDrivers
     #=================================================
-    $DriverSourcePath = "\\MEMCM-Dev\Source$\Drivers"
-    $DriverSourceFolder = "OpenOSD WinPE x64"
-    if (! (Test-Path "$(Join-Path $DriverSourcePath $DriverSourceFolder)")) {
-        Write-Output "Creating directory: [$($DriverSourcePath)\$($DriverSourceFolder)]"
-        $SourceFolderLocation = New-Item -Path "$($DriverSourcePath)" -Name "$($DriverSourceFolder)" -ItemType Directory -Verbose
+    $DriverSourceFolder = Join-Path $SourcePath "OpenOSD WinPE x64"
+    if (! (Test-Path "$($DriverSourceFolder)")) {
+        Write-Output "Creating directory: [$($DriverSourceFolder)]"
+        New-Item -Path "$($DriverSourceFolder)" -ItemType Directory -Verbose | Out-Null
     }
 
     #=================================================
@@ -34,12 +35,12 @@ function Import-DriversCM {
     #   Copy Drivers to Source Directory
     #=================================================
     foreach ($Driver in $WinPEDrivers) {
-        if (! (Test-Path "$(Join-Path $SourceFolderLocation $Driver.Name)")) {
-            $DriverFolder = New-Item -Path "$($SourceFolderLocation)" -Name $($Driver.Name) -ItemType Directory -Verbose
+        if (! (Test-Path "$(Join-Path $DriverSourceFolder $Driver.Name)")) {
+            New-Item -Path "$($DriverSourceFolder)" -Name $($Driver.Name) -ItemType Directory -Verbose | Out-Null
         }
 
         # Copy the driver to the source directory
-        Copy-Item -Path $($Driver.FullName) -Destination "$($SourceFolderLocation.FullName)" -Recurse -Force -Verbose
+        Copy-Item -Path $($Driver.FullName) -Destination "$($DriverSourceFolder)" -Recurse -Force -Verbose | Out-Null
     
         # Connect to the Configuration Manager site
         if ($SiteCode) {
@@ -57,12 +58,37 @@ function Import-DriversCM {
             Write-Error "Configuration Manager Site Code is required"
             Break
         }
+        
+        #=================================================
+        #  Create CM Category
+        #=================================================
+        $CMCategory = Get-CMCategory -CategoryType DriverCategories -Name "OpenOSD WinPE x64"
+        if ($null -eq $CMCategory) {
+            Write-Output "Creating Category: [OpenOSD WinPE x64]"
+            $CMCategory = New-CMCategory -CategoryType DriverCategories -Name "OpenOSD WinPE x64" -Verbose
+        }
+
+        #=================================================
+        #  Create CM Driver Folder
+        #=================================================
+        $CMFolder = Get-CMFolder -ParentFolderPath Driver -Name "OpenOSD WinPE x64"
+        if ($null -eq $CMFolder) {
+            Write-Output "Creating Driver Folder: [OpenOSD WinPE x64]"
+            $CMFolder = New-CMFolder -ParentFolderPath Driver -Name "OpenOSD WinPE x64" -Verbose
+        }
 
         #=================================================
         #   Import Drivers
         #=================================================
-                Write-Output "SourceFolderlocation: [$($DriverFolder.FullName)]"
-        Import-CMDriver -Path "$($DriverFolder.FullName)" -ImportFolder
+        Write-Output "SourceFolderlocation: [$($DriverSourceFolder)]"
+        $ImportedDrivers = Import-CMDriver -Path "$(Join-Path $DriverSourceFolder $Driver.Name)" -ImportFolder -AdministrativeCategory $CMCategory
+        Write-Output "Successfully Imported: [$($ImportedDrivers.LocalizedDisplayName)]"
+
+        #=================================================
+        #   Move Drivers to CM Folder
+        #=================================================
+        Move-CMObject -InputObject $ImportedDrivers -FolderPath DEV:\Driver\$($CMFolder.Name)
+        #Move-CMObject -InputObject $ImportedDrivers -FolderPath $CMFolder.Name
     }
 
     # Return to the previous location
