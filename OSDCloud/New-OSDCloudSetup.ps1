@@ -22,19 +22,9 @@
 # Get Current Date
 $ScriptDate = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 
-# Download KB5026372
-$SaveLocation = "C:\_OSDCloud\KB5026372"
-$FileURL = "https://catalog.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/20a05b31-ee84-41b9-94b2-bc02f95cf9ee/public/windows11.0-kb5026372-x64_d2e542ce70571b093d815adb9013ed467a3e0a85.msu"
-$FileName = $(($FileURL -split "/")[-1])
-#$SavedFile = Save-WebFile -SourceUrl $FileURL -DestinationName $FileName -DestinationDirectory $SaveLocation -Overwrite
-
-### Setup an OSDCloudTemplate: Include WinRE and the CU for SecureBoot Vulnerability
-$TemplateName = "WinRE-KB5026372-$($ScriptDate)"
-$TemplateName = "WinPE_ADK-2023-09_$($ScriptDate)"
-$KB5023372_File = $SavedFile.FullName
-#New-OSDCloudTemplate -Name $TemplateName -WinRE -CumulativeUpdate $KB5023372_File
-#New-OSDCloudTemplate -Name $TemplateName -WinRE
-New-OSDCloudTemplate -Name $TemplateName
+### Setup an OSDCloudTemplate
+$TemplateName = "$($ScriptDate)"
+New-OSDCloudTemplate -Name $TemplateName -WinRE
 
 ### Create an OSDCloudWorkspace - default is located 'C:\OSDCloud'
 # Just incase, set the template to the one created above
@@ -52,15 +42,14 @@ Get-ChildItem "$(Get-OSDCloudWorkspace)\Media\EFI\Microsoft\Boot" | Where {$_.PS
 # Download Wallpaper
 $SaveLocation = "C:\_OSDCloud\Wallpaper"
 $FileURL = "https://raw.githubusercontent.com/MichaelEscamilla/MichaelTheAdmin/257cbdca6cc130f104d8cf00b91e662ca115a17d/OSD/BootImage/MtA_Wallpaper_1024x768.jpg"
-#$FileURL = "https://511azrhostedimages.blob.core.windows.net/intune-511-windows/OSDCloud/511-WindowsPE-DesktopBackground-V2.jpg"
+$FileURL_PMPC = "https://raw.githubusercontent.com/MichaelEscamilla/MichaelTheAdmin/refs/heads/main/OSD/BootImage/PatchMyPC_1024x768.jpg"
 $FileName = $(($FileURL -split "/")[-1])
 $SavedFile = Save-WebFile -SourceUrl $FileURL -DestinationName $FileName -DestinationDirectory $SaveLocation -Overwrite
 
 # Set a Brand Name to Display
 $BrandName = "Michael the Admin"
 # Will use the default wallpaper for now, and include some drivers
-Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -Wallpaper "$($SavedFile.FullName)" -CloudDriver WiFi, USB, HP
-#Edit-OSDCloudWinPE -UseDefaultWallpaper -CloudDriver Wifi, USB, HP -Verbose
+Edit-OSDCloudWinPE -StartOSDCloudGUI -Brand "$($BrandName)" -Wallpaper "$($SavedFile.FullName)" -CloudDriver WiFi, USB, HP, Dell
 
 ### Setup the Hyper-V VM Settings using the 'Default Switch'
 #Set-OSDCloudVMSettings -CheckpointVM:$false -Generation 2 -MemoryStartupGB 4 -ProcessorCount 4 -SwitchName "Default Switch" -VHDSizeGB 50
