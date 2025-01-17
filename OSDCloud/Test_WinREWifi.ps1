@@ -21,6 +21,6 @@ $OSDModuleBase = (Get-Module -Name OSD -ListAvailable | Sort-Object Version -Des
 $destinationPath = Join-Path -Path $OSDModuleBase -ChildPath 'Public\OSDCloudTS\OSD.WinRE.WiFi.ps1'
 $destinationPath2 = Join-Path -Path $OSDModuleBase -ChildPath 'OSD.psd1'
 Copy-Item -Path $tempFilePath -Destination $destinationPath -Force
-Copy-Item -Path $tempFilePath -Destination $destinationPath2 -Force
+#Copy-Item -Path $tempFilePath -Destination $destinationPath2 -Force
 Write-Output "Script replaced in module at [$destinationPath]"
 Write-Output "Script replaced in module at [$destinationPath2]"
