@@ -29,14 +29,15 @@ ForEach ($ESD in $ESDFilesX64) {
     # Define an Image Path
     $ImagePath = "$ImageFolderPath\$($ESD.FileName)"
     $ImageDownloadRequired = $true
+
     # Check if the Image Exists
     if (Test-Path -Path $ImagePath) {
-        Write-Host "Foung previously downloaded media, Checking Image SHA1 Hash"
+        Write-Host "Found previously downloaded media, Checking Image SHA1 Hash"
         # Get the Hash of the Image
         $ImageHash = Get-FileHash -Path $ImagePath -Algorithm SHA1
         # Check if the Hash is the same
         if ($ImageHash.Hash -eq $ESD.SHA1) {
-            Write-Host "Skipping Download, SHA1 Hash Match: [$($ImagePath)]"
+            Write-Host "Skipping Download, SHA1 Hash Match: [$($ESD.FileName)]"
             $ImageDownloadRequired = $false
         }
         else {
@@ -47,6 +48,10 @@ ForEach ($ESD in $ESDFilesX64) {
     # Download the Image
     if ($ImageDownloadRequired) {
         Write-Host "Downloading Image: [$($ImagePath)]"
+
+        Save-WebFile -SourceUrl "$($ESD.Url)" -DestinationDirectory "$($ImageFolderPath)" -DestinationName "$($ESD.FileName)" -Overwrite -Verbose
+        #Save-WebFile -SourceUrl "$($ESD.Url)" -DestinationName "$($ImagePath)" -Overwrite -Verbose
+        <#
         # Kill existing download jobs of Image
         $ExistingBitsJob = Get-BitsTransfer -Name "$($ESD.FileName)" -AllUsers -ErrorAction SilentlyContinue
         if ($ExistingBitsJob) { Remove-BitsTransfer -BitsJob $ExistingBitsJob }
@@ -59,5 +64,6 @@ ForEach ($ESD in $ESDFilesX64) {
         # Download the Image
         Write-Host -ForegroundColor DarkGray "Start-BitsTransfer`n`t-Source:`t[$($ESD.Url)]`n`t-Destination:`t[$($ImageFolderPath)]`n`t-DisplayName:`t[$($ESD.FileName)]`n`t-Description:`t['Windows Media Download']`n`t-RetryInterval:`t[60]"
         $BitsJob = Start-BitsTransfer -Source $ESD.Url -Destination $ImageFolderPath -DisplayName $ESD.FileName -Description "Windows Media Download" -RetryInterval 60
+        #>
     }
 }
