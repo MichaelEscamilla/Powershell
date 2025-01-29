@@ -1,13 +1,10 @@
-
+[CmdletBinding()]
 param (
-    [string]
+    [System.String]
     $DownloadUrl,
 
-    [string]
-    $DocID,
-
-    [ValidateSet('.txt', '.exe')]
-    [string]$DownloadFileType = '.exe'
+    [System.String]
+    $DocID
 )
 
 # Build Headers to trick the website
@@ -44,7 +41,7 @@ try {
 catch {
     throw "Unable to download the Lenovo Driver Pack from $DownloadUrl"
 }
-
+#$Response.Content | Out-File -FilePath "$PSScriptRoot\response.txt" -Force
 # Loop through the RawContent - Split by New Line
 foreach ($Line in $($Response.RawContent -split "`n")) {
     if ($Line -match "window.customData \|\| {`"docId`"") {
@@ -58,21 +55,41 @@ foreach ($Line in $($Response.RawContent -split "`n")) {
         $CustomData = $CustomData.Replace(";", "")
         # Convert the JSON to a PowerShell Object
         $CustomData = ConvertFrom-Json $CustomData
-            
+
+        # Get the Supported Models
+        $SupportedModels = foreach ($Template in $CustomData.driver.body.DriverDetails.Templates) {
+            if ($Template.Label -eq "product") {
+                # Get the Template Body
+                $TemplateBody = $Template.body
+
+                # Convert the Body to Objects
+                $BodyObjects = [regex]::Matches($TemplateBody, '<li>(.*?)<\/li>')
+                foreach ($Match in $BodyObjects) {
+                    $Objects = [Ordered]@{
+                        # Convert HTML Special Characters
+                        SupportedModels = [System.Web.HttpUtility]::HtmlDecode($Match.Groups[1].Value)
+                    }
+                    New-Object -TypeName PSObject -Property $Objects
+                }
+            }
+        }
+        
+        # Build a PSObject with the Download URL and Hash Info
         $Results = foreach ($File in $CustomData.driver.body.DriverDetails.Files) {
             # Build a PSObject with the Download URL and Hash Info
             $ObjectProperties = [Ordered]@{
-                DocID       = $CustomData.docID
-                OS          = $File.OperatingSystemKeys
-                Name        = $File.Name
-                FileName    = $File.URL | Split-Path -Leaf
-                Released    = Get-Date $([System.DateTimeOffset]::FromUnixTimeMilliseconds($($File.Released.Unix)).DateTime) -Format "yyyy.MM.dd"
-                FileType    = $File.TypeString
-                DownloadUrl = $File.URL
-                Size        = $File.Size
-                SHA1        = $File.SHA1
-                SHA256      = $File.SHA256
-                MD5         = $File.MD5
+                DocID           = $CustomData.docID
+                OS              = $File.OperatingSystemKeys
+                Name            = $File.Name
+                FileName        = $File.URL | Split-Path -Leaf
+                Released        = Get-Date $([System.DateTimeOffset]::FromUnixTimeMilliseconds($($File.Released.Unix)).DateTime) -Format "yyyy.MM.dd"
+                SupportedModels = $SupportedModels.SupportedModels
+                FileType        = $File.TypeString
+                DownloadUrl     = $File.URL
+                Size            = $File.Size
+                SHA1            = $File.SHA1
+                SHA256          = $File.SHA256
+                MD5             = $File.MD5
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
         }
@@ -80,20 +97,3 @@ foreach ($Line in $($Response.RawContent -split "`n")) {
         Return $Results
     }
 }
-
-<#
-    # Loop through the RawContent - Split by New Line
-    foreach ($Item in $($Response.RawContent -split "`n")) {
-        # Check for the line with the download link
-        if ($Item -match "https://download\.lenovo\.com.*\.exe") {
-            # Get the Index of the pattern '.exe'
-            $Index_FileType = $Item.IndexOf("$($DownloadFileType)")
-            # Get the Last Index of the pattern 'https://download.lenovo.com' Starting from the Index of '.exe'
-            $Index_DownloadLenovoCom = $Item.LastIndexOf("https://download.lenovo.com", $($Index_FileType))
-            # Get the Download URL
-            $Download_Url = $Item.Substring($Index_DownloadLenovoCom, ($Index_FileType + $($DownloadFileType.Length)) - ($Index_DownloadLenovoCom))
-            
-            Return $Download_Url
-        }
-    }
-    #>
