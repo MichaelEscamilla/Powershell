@@ -1,7 +1,12 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
-    [string]$LenovoDocID = "ds563172"
+    [System.String]
+    $LenovoDocID = "ds563172",
+
+    [Parameter(Mandatory = $false)]
+    [System.String]
+    $DestinationPath = "$PSScriptRoot"
 )
 
 # Get the Lenovo DocID file information
@@ -9,7 +14,7 @@ $LenovoDocIDFiles = & $PSScriptRoot\Resolve-LenovoDSDownloadUrl.ps1 -DocID $Leno
 
 if ($LenovoDocIDFiles) {
     # Main Download Path
-    $RootDownloadPath = Join-Path $PSScriptRoot "LenovoDrivers"
+    $RootDownloadPath = Join-Path $DestinationPath "LenovoDrivers"
     if (-not (Test-Path $RootDownloadPath)) {
         New-Item -Path $RootDownloadPath -ItemType Directory | Out-Null
     }
