@@ -1,0 +1,941 @@
+{
+  "ThinkPad": [
+    {
+      "SubSeries": "<strong>Sub-series</strong>",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "A475 / A275 (Type 20KM, 20KL, 20KC, 20KD)",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS500736"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS500737"
+        }
+      ],
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500738"
+      }
+    },
+    {
+      "SubSeries": "8, 10 (Type 20C1, 20C3)",
+      "WinPE31": {},
+      "WinPE5": {
+        "OS": "32-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS102871"
+      },
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "11e (Type 20G9, 20GB), 13, L450, T450, T450s, T460, X260, Yoga 11e (Type 20G8, 20GA)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS119264"
+      }
+    },
+    {
+      "SubSeries": "E14 (Type 20RA, 20RB), E15 (Type 20RD, 20RE)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS541513"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 2 (Type 20T6, 20T7), E15 Gen 2 (Type 20T8, 20T9)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS544286"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 2 (Type 20TA, 20TB), E15 Gen 2 (Type 20TD, 20TE)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS547277"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 3 (Type 20Y7, 20YD, 20YE, 20YF, E15 Gen 3 (Type 20YG, 20YH, 20YJ, 20YK)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds549738"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 4 (Type 21EB, 21EC), E15 Gen 4 (Type 21ED, 21EE)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds558599"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 4 (Type 21E3, 21E4), E15 Gen 4 (Type 21E6, 21E7)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "http://support.lenovo.com/us/en/downloads/ds561406"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 5 (Type 21JK, 21JL), E16 Gen 1 (Type 21JN, 21JQ)&nbsp;",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds562742"
+      }
+    },
+    {
+      "SubSeries": "E14 Gen 5 (Type 21JR, 21JS), E16 Gen 1 (Type 21JT, 21JU)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "http://pcsupport.lenovo.com/us/en/downloads/ds563044"
+      }
+    },
+    {
+      "SubSeries": "E490 (Type 20N8, 20N9), E490s (Type 20NG), E590 (Type 20NB, 20NC)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS505931"
+      }
+    },
+    {
+      "SubSeries": "Helix 2nd Gen (Type 20CG, 20CH), T550, W550s, X250, X1 Carbon (Type 20BS, 20BT), Yoga 15",
+      "WinPE31": {
+        "OS": "32 & 64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS101966"
+      },
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS102312"
+      },
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS104737"
+      }
+    },
+    {
+      "SubSeries": "Lenovo K14 (Type 21CV, 21CU)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS554384"
+      }
+    },
+    {
+      "SubSeries": "Lenovo K14 (Type 21CS, 21CT)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS555758"
+      }
+    },
+    {
+      "SubSeries": "ThinkPad OneLink Pro Dock, ThinkPad Tablet 10 Dock, Lenovo USB 3.0 Ethernet Adapter",
+      "WinPE31": {},
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/solutions/HT101981"
+      },
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "L14 Gen 2 (Type 20X1, 20X2, L15 Gen 2 (Type 20X3, 20X4)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS547827"
+      }
+    },
+    {
+      "SubSeries": "L14 Gen 2 (Type 20X5, 20X6, L15 Gen 2 (Type 20X7, 20X8)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds549669"
+      }
+    },
+    {
+      "SubSeries": "L14 Gen 5 (Type 21L1, 21L2), L16 Gen 1 (Type 21L3, 21L4)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS568545"
+      }
+    },
+    {
+      "SubSeries": "L460, T460p",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS119281"
+      }
+    },
+    {
+      "SubSeries": "L470 (Type 20JV, 20JU)",
+      "WinPE31": {},
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS121687"
+      },
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "L560, P50, P50s, P70, T460s, T560, X1 Carbon (Type 20FB, 20FC), X1 Yoga (Type 20FQ, 20FR), Yoga 260",
+      "WinPE31": {
+        "OS": "32 & 64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112089"
+      },
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112087"
+      },
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS105977"
+      }
+    },
+    {
+      "SubSeries": "L570, T470, T470s, T570, X1 Yoga, X1 Tablet, X1 Carbon",
+      "WinPE31": {},
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds121660"
+      },
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "P1 (Type 20MD, 20ME), X1 Extreme (Type 20MF, 20MG), P52 (Type 20M9, 20MA), P72 (Type 20MB, 20MC)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS505256"
+      }
+    },
+    {
+      "SubSeries": "P15 Gen 2 (Type 20YQ, 20YR), P17 Gen 2 (Type 20YU, 20YV), T15g Gen 2 (Type 20YS, 20YT)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS551195"
+      }
+    },
+    {
+      "SubSeries": "P15v Gen 2 (Types 21A9, 21AA), T15p Gen 2 (Types 21A7, 21A8)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS551362"
+      }
+    },
+    {
+      "SubSeries": "P15v Gen 3 (Type 21EM, 21EN)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds558711"
+      }
+    },
+    {
+      "SubSeries": "P16 Gen 1 (Type 21D6, 21D7)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS558461"
+      }
+    },
+    {
+      "SubSeries": "P16s Gen 1 (Type 21CK, 21CL), P14s Gen 3 (Type 21J5, 21J6), T14 Gen 3 (Type 21CF, 21CG), T16 Gen 1 (Type 21CH, 21CJ)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS557608"
+      }
+    },
+    {
+      "SubSeries": "P16s Gen 2 (Type 21K9, 21KA), P14s Gen 4 (Type 21K5, 21K6), T14 Gen 4 (Type 21K3, 21K4), T16 Gen 2 (Type 21K7, 21K8)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS564958"
+      }
+    },
+    {
+      "SubSeries": "P16v Gen 1 (Type 21FE, 21FF)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS565507"
+      }
+    },
+    {
+      "SubSeries": "P16v Gen 2 (Type 21KX, 21KY)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS568970"
+      }
+    },
+    {
+      "SubSeries": "X270 (Type 20HM, 20HN, 20K5, 20K6)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS120413"
+      }
+    },
+    {
+      "SubSeries": "T495 (Type 20NJ, 20NK), T495s (Type 20QJ, 20QK), X395 (Type 20NL, 20NM)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS543834"
+      }
+    },
+    {
+      "SubSeries": "T14 (Type 20UD, 20UE), T14s (Type 20UH, 20UJ), X13 Gen 1 (Type 20UF, 20UG)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS545020"
+      }
+    },
+    {
+      "SubSeries": "T14 Gen 5 (Type 21ML, 21MM), T16 Gen 3 (Type 21MN, 21MQ)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS568636"
+      }
+    },
+    {
+      "SubSeries": "T14s Gen 2 (Type 20XF, 20XG), X13 Gen 2 (Type 20XH, 20XJ)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS551368"
+      }
+    },
+    {
+      "SubSeries": "T14s Gen 3 (Type 21CQ, 21CR), X13 Gen 3 (Type 21CM, 21CN)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS557594"
+      }
+    },
+    {
+      "SubSeries": "T14s Gen 3 (Type 21BR, 21BS), X13 Gen 3 (Type 21BN, 21BQ)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS559457"
+      }
+    },
+    {
+      "SubSeries": "T14s Gen 4 (Type 21F6, 21F7)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS562758"
+      }
+    },
+    {
+      "SubSeries": "T490 (Type 20RY, 20RX), X390 (Type 20SC, 20SD)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS542109"
+      }
+    },
+    {
+      "SubSeries": "T495 (Type 20NJ, 20NK), T495s (Type 20QJ, 20QK)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS543834"
+      }
+    },
+    {
+      "SubSeries": "Yoga 14 (Type 20FY), Yoga 460, P40 Yoga",
+      "WinPE31": {
+        "OS": "32 & 64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112081"
+      },
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112076"
+      },
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112079"
+      }
+    },
+    {
+      "SubSeries": "X1 Nano Gen 1 (Type 20UN, 20UQ), X1 Titanium Gen 1 (Type 20QA, 20QB), X13 Yoga Gen 2 (Type 20W8, 20W9), P1 Gen 4 (Type 20Y3, 20Y4), X1 Extreme Gen 4 (Type 20Y5, 20Y6)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS547601"
+      }
+    },
+    {
+      "SubSeries": "X12 Detachable Gen 1 (Type 20UW, 20UV)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS548453"
+      }
+    },
+    {
+      "SubSeries": "X13 Gen 4 (Type 21EX, 21EY), X13 Yoga Gen 4 (Type 21F2, 21F3)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS562790"
+      }
+    },
+    {
+      "SubSeries": "X13 Gen 5 (Type 21LU, 21LV), X13 2-in-1 Gen 5 (Type 21LW, 21LX)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS568497"
+      }
+    },
+    {
+      "SubSeries": "X1 Yoga (Type 20JD, 20JE, 20JF, 20JG), X1 Tablet (Type 20JB, 20JC), X1 Carbon (Type 20HQ, 20HR, 20K3, 20K4), L570 (Type 20J8, 20J9, 20JQ, 20JR), T570 (Type 20H9, 20HA, 20JW, 20JX), T470 (Type 20HD, 20HE, 20JM, 20JN), T470s (Type 20HF, 20HG, 20JS, 20JT), P51s (Type 20HB, 20HC, 20JY, 20K0)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS120934"
+      }
+    },
+    {
+      "SubSeries": "X1 Carbon (Type 20K3, 20K4), L570 (Type 20JQ, 20JR), T570 (Type 20JW, 20JX), T470 (Type 20JM, 20JN), T470s (Type 20JS, 20JT), P51s (Type 20JY, 20K0)",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS120951"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS120953"
+        }
+      ],
+      "WinPE5": {},
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "X1 Carbon (Type 20KH, 20KG), X1 Tablet Gen 3 (Type 20KJ, 20KK), X1 Yoga (Type 20LD, 20LE, 20LF, 20LG), X280 (Type 20KE, 20KF), P52s (Type 20LB, 20LC), T480 (Type 20L5, 20L6), T480s (Type 20L7, 20L8), T580 (Type 20L9, 20LA)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS502454"
+      }
+    },
+    {
+      "SubSeries": "X1 Carbon 11th Gen (Type 21HM, 21HN)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS561550"
+      }
+    },
+    {
+      "SubSeries": "ThinkPad X1 Yoga Gen 7 (Type 21CD, 21CE), X1 Carbon Gen 10 (Type 21CB, 21CC), P1 Gen 5 (Type 21DC, 21DD), X1 Extreme Gen 5 (Type 21DE, 21DF), X1 Nano Gen 2 (Type 21E8, 21E9)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds558779"
+      }
+    },
+    {
+      "SubSeries": "Z13 Gen 1 (Type 21D2, 21D3), Z16 Gen 1 (Type 21D4, 21D5)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS558450"
+      }
+    },
+    {
+      "SubSeries": "Z16 Gen 2 (Type 21JX, 21JY)",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS566094"
+      }
+    }
+  ],
+  "ThinkStation": [
+    {
+      "SubSeries": "<strong>Sub-series</strong>",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "P3",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds563192"
+      }
+    },
+    {
+      "SubSeries": "P8",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS568671"
+      }
+    },
+    {
+      "SubSeries": "P310",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS106093"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS106096"
+      }
+    },
+    {
+      "SubSeries": "P320",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500696"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500698"
+      }
+    },
+    {
+      "SubSeries": "P320 Tiny",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500702"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500699"
+      }
+    },
+    {
+      "SubSeries": "P330",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS504611"
+      }
+    },
+    {
+      "SubSeries": "P340 Tiny, P340",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS545687"
+      }
+    },
+    {
+      "SubSeries": "P360",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds556382"
+      }
+    },
+    {
+      "SubSeries": "P360 Tiny",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS556258"
+      }
+    },
+    {
+      "SubSeries": "P410, P510, P710 and P910",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS113151"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS113152"
+      }
+    },
+    {
+      "SubSeries": "P500, P700 and P900",
+      "WinPE31": {
+        "OS": "32 & 64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS103740"
+      },
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS103741"
+      },
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS106048"
+      }
+    },
+    {
+      "SubSeries": "P520, P520c, P720, P920",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS502154"
+      }
+    },
+    {
+      "SubSeries": "P620",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS546529"
+      }
+    }
+  ],
+  "ThinkCentre": [
+    {
+      "SubSeries": "<strong>Sub-series</strong>",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "E73, M73, M73p, M83, M93, M93p, M700, M800, M900, M900x",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds105412"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS105413"
+        }
+      ],
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds105414"
+      },
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds105415"
+      }
+    },
+    {
+      "SubSeries": "M60e",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds561260"
+      }
+    },
+    {
+      "SubSeries": "M70q, M80t, M80s, M80q, M90q",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS545687"
+      }
+    },
+    {
+      "SubSeries": "M70t Gen 3, M70s Gen 3, M70q Gen 3, M80q Gen 3, M90q Gen 3",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS556258"
+      }
+    },
+    {
+      "SubSeries": "M70t Gen 4, M70s Gen 4, M70q Gen 4, M80q Gen 4",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds563172"
+      }
+    },
+    {
+      "SubSeries": "M70t Gen 5, M70s Gen 5, M70q Gen 5, M90t Gen 5, M90s Gen 5, M90q Gen 5, Neo Ultra, Neo 50t Gen 5",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds568506"
+      }
+    },
+    {
+      "SubSeries": "M75s-1",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds542093"
+      }
+    },
+    {
+      "SubSeries": "M75q-1",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds542998"
+      }
+    },
+    {
+      "SubSeries": "M75q Gen 5, M75s Gen 5, M75t Gen 5",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS569817"
+      }
+    },
+    {
+      "SubSeries": "M79, M53 and M600",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds105118"
+      },
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://pcsupport.lenovo.com/us/en/downloads/ds105117"
+      },
+      "WinPE1011": {}
+    },
+    {
+      "SubSeries": "M79 and M600",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS105119"
+      }
+    },
+    {
+      "SubSeries": "M600",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS501531"
+      }
+    },
+    {
+      "SubSeries": "M625q",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS503362"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS503363"
+      }
+    },
+    {
+      "SubSeries": "M710q, M710s, M710t, M910q, M910s, M910t, M910x",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS501403"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS501404"
+        }
+      ],
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500728"
+      }
+    },
+    {
+      "SubSeries": "M715q",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS119270"
+      }
+    },
+    {
+      "SubSeries": "M715q 2nd Gen",
+      "WinPE31": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS506463"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/ds504277"
+      }
+    },
+    {
+      "SubSeries": "M715s, M715t",
+      "WinPE31": {
+        "OS": "32-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500718"
+      },
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS500715"
+      }
+    },
+    {
+      "SubSeries": "M725s-",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS504613"
+      }
+    },
+    {
+      "SubSeries": "M900z",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS112426"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS112426"
+        }
+      ],
+      "WinPE5": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112427"
+      },
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS112425"
+      }
+    },
+    {
+      "SubSeries": "M920t, M920s, M720t, M720s, M920q, M720q, M920x, V530, P330 tiny",
+      "WinPE31": {},
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS503944"
+      }
+    },
+    {
+      "SubSeries": "X1",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS119040"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS119040"
+        }
+      ],
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS119040"
+      }
+    },
+    {
+      "SubSeries": "V520",
+      "WinPE31": [
+        {
+          "OS": "32-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS501358"
+        },
+        {
+          "OS": "64-bit",
+          "URL": "https://support.lenovo.com/us/en/downloads/DS501357"
+        }
+      ],
+      "WinPE5": {},
+      "WinPE1011": {
+        "OS": "64-bit",
+        "URL": "https://support.lenovo.com/us/en/downloads/DS501356"
+      }
+    }
+  ]
+}
