@@ -7,11 +7,15 @@ Push-Location "DEV:\"
 #=================================================
 $CMRootFolderamd64 = Get-CMFolder -ParentFolderPath Driver -Name "OpenOSD WinPE amd64"
 if ($null -eq $CMRootFolderamd64) {
-    Write-Output "Could not find Folder: [OpenOSD WinPE amd64]"
+    Write-Output "Could not find CM Folder: [OpenOSD WinPE amd64]"
 }
 $CMRootFolderarm64 = Get-CMFolder -ParentFolderPath Driver -Name "OpenOSD WinPE arm64"
 if ($null -eq $CMRootFolderarm64) {
-    Write-Output "Could not find Folder: [OpenOSD WinPE arm64]"
+    Write-Output "Could not find CM Folder: [OpenOSD WinPE arm64]"
+}
+$CMRootFolderOSDFramework = Get-CMFolder -ParentFolderPath Driver -Name "OSDFramework"
+if ($null -eq $CMRootFolderOSDFramework) {
+    Write-Output "Could not find CM Folder: [OSDFramework]"
 }
 
 #=================================================
@@ -19,19 +23,22 @@ if ($null -eq $CMRootFolderarm64) {
 #=================================================
 $CMDriversamd64 = Get-CMDriver -Fast | Where-Object { $_.ObjectPath -match "$($CMRootFolderamd64.Name)" } | Remove-CMDriver -Force
 $CMDriversarm64 = Get-CMDriver -Fast | Where-Object { $_.ObjectPath -match "$($CMRootFolderarm64.Name)" } | Remove-CMDriver -Force
+$CMDriversOSDFramework = Get-CMDriver -Fast | Where-Object { $_.ObjectPath -match "$($CMRootFolderOSDFramework.Name)" } | Remove-CMDriver -Force
 
 #=================================================
 #  Delete CM Root Driver Folder
 #=================================================
 $CMRootFolderamd64 | Remove-CMFolder -Force
 $CMRootFolderarm64 | Remove-CMFolder -Force
+$CMRootFolderOSDFramework | Remove-CMFolder -Force
 
 #=================================================
 #  Delete CM Category
 #=================================================
 Get-CMCategory -CategoryType DriverCategories -Name "OpenOSD WinPE amd64" | Remove-CMCategory -Force
 Get-CMCategory -CategoryType DriverCategories -Name "OpenOSD WinPE arm64" | Remove-CMCategory -Force
-Get-CMCategory -CategoryType DriverCategories | Remove-CMCategory -Force
+Get-CMCategory -CategoryType DriverCategories -Name "OSDFramework" | Remove-CMCategory -Force
+#Get-CMCategory -CategoryType DriverCategories | Remove-CMCategory -Force
 
 #=================================================
 #  Return to the original location
@@ -46,4 +53,8 @@ if (Test-Path "\\MEMCM-DEV\Source$\Drivers\OpenOSD WinPE amd64") {
 }
 if (Test-Path "\\MEMCM-DEV\Source$\Drivers\OpenOSD WinPE arm64") {
     Remove-Item -Path "\\MEMCM-DEV\Source$\Drivers\OpenOSD WinPE arm64" -Recurse -Force | Out-Null
+}
+
+if (Test-Path "\\MEMCM-DEV\Source$\Drivers\OSDFramework") {
+    Remove-Item -Path "\\MEMCM-DEV\Source$\Drivers\OSDFramework" -Recurse -Force | Out-Null
 }
