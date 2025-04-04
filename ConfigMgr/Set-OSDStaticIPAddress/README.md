@@ -1,3 +1,3 @@
 # Set-OSDStaticIPAddress
 
-![Static IP Task Sequence Example](/.Images/Static-TSExample.png)
+![Static IP Task Sequence Example](./Images/StaticIP_TSExample.png)
