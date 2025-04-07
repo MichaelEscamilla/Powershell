@@ -11,7 +11,45 @@ TS Variables Created:
  - OSDAdapter0Gateways
  - OSDAdapter0DNSServerList
  
+.PARAMETER IPAddress
+The static IP address to set. Default: 192.168.1.30
+
+.PARAMETER SubnetMask
+The subnet mask to set. Default: 255.255.255.0
+
+.PARAMETER Gateway
+The default gateway address. Default: 192.168.1.1
+
+.PARAMETER DNSServer
+The DNS server address. Default: 192.168.1.10
+
+.PARAMETER EnableDHCP
+If provided, enables DHCP instead of static IP. Default: False
+
+.EXAMPLE
+.\Set-OSDStaticIPAddress.ps1 -IPAddress 10.0.0.100 -SubnetMask 255.255.255.0 -Gateway 10.0.0.1 -DNSServer 10.0.0.10
+
+.EXAMPLE
+.\Set-OSDStaticIPAddress.ps1 -EnableDHCP $true
 #>
+
+[CmdletBinding()]
+param (
+	[Parameter(Mandatory = $false)]
+	[string]$IPAddress = "192.168.1.30",
+    
+	[Parameter(Mandatory = $false)]
+	[string]$SubnetMask = "255.255.255.0",
+    
+	[Parameter(Mandatory = $false)]
+	[string]$Gateway = "192.168.1.1",
+    
+	[Parameter(Mandatory = $false)]
+	[string]$DNSServer = "192.168.1.10",
+    
+	[Parameter(Mandatory = $false)]
+	[bool]$EnableDHCP = $false
+)
 
 try {
 	# Initialize the Task Sequence Environment
@@ -23,14 +61,16 @@ catch {
 }
 
 if ($TSEnviornment) {
-	#region Create the Group Policies
+	#region Create the Task Sequence Variables
+	$DHCPValue = if ($EnableDHCP) { "TRUE" } else { "FALSE" }
+    
 	$TSVariables = @(
 		@{ Name = "OSDAdapterCount"; Value = "1" }, 
-		@{ Name = "OSDAdapter0EnableDHCP"; Value = "FALSE" },
-		@{ Name = "OSDAdapter0IPAddressList"; Value = "192.168.1.30" },
-		@{ Name = "OSDAdapter0SubnetMask"; Value = "255.255.255.0" },
-		@{ Name = "OSDAdapter0Gateways"; Value = "192.168.1.1" },
-		@{ Name = "OSDAdapter0DNSServerList"; Value = "192.168.1.10" }
+		@{ Name = "OSDAdapter0EnableDHCP"; Value = $DHCPValue },
+		@{ Name = "OSDAdapter0IPAddressList"; Value = $IPAddress },
+		@{ Name = "OSDAdapter0SubnetMask"; Value = $SubnetMask },
+		@{ Name = "OSDAdapter0Gateways"; Value = $Gateway },
+		@{ Name = "OSDAdapter0DNSServerList"; Value = $DNSServer }
 	)
 
 	foreach ($TSVariable in $TSVariables) {
@@ -41,4 +81,12 @@ if ($TSEnviornment) {
 }
 else {
 	Write-Output "Not in Task Sequence"
+    
+	# Display the parameters that would be used in a task sequence
+	Write-Output "Script was called with the following parameters:"
+	Write-Output "IP Address: $IPAddress"
+	Write-Output "Subnet Mask: $SubnetMask"
+	Write-Output "Gateway: $Gateway"
+	Write-Output "DNS Server: $DNSServer"
+	Write-Output "DHCP Enabled: $EnableDHCP"
 }
