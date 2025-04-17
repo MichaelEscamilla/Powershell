@@ -11,7 +11,7 @@ TS Variables Created:
 
 try {
 	# Initialize the Task Sequence Environment
-	$TSEnviornment = New-Object -ComObject Microsoft.SMS.TSEnvironment
+	$TSEnviornment = New-Object -ComObject Microsoft.SMS.TSEnvironment -ErrorAction Stop
 }
 catch {
 	# Output message if not in a Task Sequence environment
