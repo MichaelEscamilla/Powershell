@@ -1,4 +1,4 @@
-# Invoke-ComputerNamePrompt.ps1
+# Invoke-ComputerNamePrompt.ps1 - Yes
 # This script displays a WPF window asking for a computer name and returns the input.
 
 Add-Type -AssemblyName PresentationFramework
