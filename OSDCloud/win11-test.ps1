@@ -1,11 +1,11 @@
-<#[CmdletBinding()]
+[CmdletBinding()]
 param(
     [string]$OSName       = "Windows 11 24H2 x64",
     [string]$OSEdition    = "Pro",
     [string]$OSActivation = "Retail",
     [string]$OSLanguage   = "en-us"
 )
-#>
+
 
 $ScriptName = 'Michaelhanson.dev'
 $ScriptVersion = '1.0.2'
