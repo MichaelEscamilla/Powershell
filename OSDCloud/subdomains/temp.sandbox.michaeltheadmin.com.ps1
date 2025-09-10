@@ -1,6 +1,6 @@
 <#PSScriptInfo
-.VERSION 23.6.10.1
-.GUID 9670c013-d1b1-4f5d-9bd0-0fa185b9f203
+.VERSION 25.9.9.1
+.GUID 2f8a4c5e-7b9d-4e1a-8f3c-5d6e9a2b4c7f
 .AUTHOR David Segura @SeguraOSD
 .COMPANYNAME osdcloud.com
 .COPYRIGHT (c) 2023 David Segura osdcloud.com. All rights reserved.
@@ -13,9 +13,9 @@
 .EXTERNALSCRIPTDEPENDENCIES 
 .RELEASENOTES
 Script should be executed in a Command Prompt using the following command
-powershell Invoke-Expression -Command (Invoke-RestMethod -Uri sandbox.osdcloud.com)
+powershell Invoke-Expression -Command (Invoke-RestMethod -Uri temp.sandbox.michaeltheadmin.com)
 This is abbreviated as
-powershell iex (irm sandbox.osdcloud.com)
+powershell iex (irm temp.sandbox.michaeltheadmin.com)
 #>
 #Requires -RunAsAdministrator
 <#
@@ -26,15 +26,15 @@ powershell iex (irm sandbox.osdcloud.com)
 .NOTES
     Version 25.9.9.1
 .LINK
-    https://raw.githubusercontent.com/OSDeploy/OSD/master/cloud/sandbox.osdcloud.com.ps1
+    https://raw.githubusercontent.com/MichaelEscamilla/Powershell/refs/heads/main/OSDCloud/subdomains/temp.sandbox.michaeltheadmin.com.ps1
 .EXAMPLE
-    powershell iex (irm temp.michaeltheadmin.com)
+    powershell iex (irm temp.sandbox.michaeltheadmin.com)
 #>
 
 [CmdletBinding()]
 param()
-$ScriptName = 'sandbox.osdcloud.com'
-$ScriptVersion = '23.6.10.1'
+$ScriptName = 'temp.sandbox.michaeltheadmin.com'
+$ScriptVersion = '25.9.9.1'
 
 # Temp Fix while cert is expired
 add-type @"
