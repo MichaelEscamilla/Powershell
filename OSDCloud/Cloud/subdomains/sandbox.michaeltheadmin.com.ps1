@@ -24,7 +24,7 @@ powershell iex (irm sandbox.michaeltheadmin.com)
 .DESCRIPTION
     PowerShell Script which supports the OSDCloud environment
 .NOTES
-    Version 25.9.9.1
+    Version 25.9.10.0
 .LINK
     https://raw.githubusercontent.com/MichaelEscamilla/Powershell/refs/heads/main/OSDCloud/subdomains/sandbox.michaeltheadmin.com.ps1
 .EXAMPLE
@@ -34,7 +34,7 @@ powershell iex (irm sandbox.michaeltheadmin.com)
 [CmdletBinding()]
 param()
 $ScriptName = 'sandbox.michaeltheadmin.com'
-$ScriptVersion = '25.9.9.1'
+$ScriptVersion = '25.9.10.0'
 
 #region Initialize
 $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$ScriptName.log"
@@ -52,7 +52,7 @@ else {
 }
 
 Write-Host -ForegroundColor Green "[+] $ScriptName $ScriptVersion ($WindowsPhase Phase)"
-Invoke-Expression -Command (Invoke-RestMethod -Uri functions.osdcloud.com)
+Invoke-Expression -Command (Invoke-RestMethod -Uri https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/OSDCloud/Cloud/subdomains/functions.michaeltheadmin.com.ps1)
 #endregion
 
 #region Admin Elevation
