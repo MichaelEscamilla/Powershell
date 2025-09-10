@@ -31,6 +31,11 @@ powershell iex (irm sandbox.osdcloud.com)
     powershell iex (irm temp.michaeltheadmin.com)
 #>
 
+[CmdletBinding()]
+param()
+$ScriptName = 'sandbox.osdcloud.com'
+$ScriptVersion = '23.6.10.1'
+
 # Temp Fix while cert is expired
 add-type @"
 using System.Net;
@@ -44,11 +49,6 @@ public class TrustAllCertsPolicy : ICertificatePolicy {
 }
 "@
 [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-
-[CmdletBinding()]
-param()
-$ScriptName = 'sandbox.osdcloud.com'
-$ScriptVersion = '23.6.10.1'
 
 #region Initialize
 $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$ScriptName.log"
