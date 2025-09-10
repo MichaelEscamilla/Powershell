@@ -52,7 +52,7 @@ else {
 }
 
 Write-Host -ForegroundColor Green "[+] $ScriptName $ScriptVersion ($WindowsPhase Phase)"
-Invoke-Expression -Command (Invoke-RestMethod -Uri https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/OSDCloud/Cloud/subdomains/functions.michaeltheadmin.com.ps1)
+Invoke-Expression -Command (Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/OSDCloud/Cloud/subdomains/functions.michaeltheadmin.com.ps1')
 #endregion
 
 #region Admin Elevation
