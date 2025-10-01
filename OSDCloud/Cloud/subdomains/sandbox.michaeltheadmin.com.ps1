@@ -33,7 +33,7 @@ powershell iex (irm sandbox.osdcloud.com)
 [CmdletBinding()]
 param()
 $ScriptName = 'sandbox.osdcloud.com'
-$ScriptVersion = '23.6.10.1'
+$ScriptVersion = '23.10.1.1'
 
 #region Initialize
 $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$ScriptName.log"
@@ -51,7 +51,7 @@ else {
 }
 
 Write-Host -ForegroundColor Green "[+] $ScriptName $ScriptVersion ($WindowsPhase Phase)"
-Invoke-Expression -Command (Invoke-RestMethod -Uri functions.osdcloud.com)
+Invoke-Expression -Command (Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/OSDCloud/Cloud/subdomains/functions.michaeltheadmin.com.ps1')
 #endregion
 
 #region Admin Elevation
