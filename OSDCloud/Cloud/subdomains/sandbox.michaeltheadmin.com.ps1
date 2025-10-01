@@ -1,7 +1,7 @@
 <#PSScriptInfo
-.VERSION 25.9.10.0
-.GUID 3a7b2c8d-9e4f-4a5b-bf2c-6e8a1d3c5f9b
-.AUTHOR Michael Escamilla, David Segura @SeguraOSD
+.VERSION 23.6.10.1
+.GUID 9670c013-d1b1-4f5d-9bd0-0fa185b9f203
+.AUTHOR David Segura @SeguraOSD
 .COMPANYNAME osdcloud.com
 .COPYRIGHT (c) 2023 David Segura osdcloud.com. All rights reserved.
 .TAGS OSDeploy OSDCloud WinPE OOBE Windows AutoPilot
@@ -13,9 +13,9 @@
 .EXTERNALSCRIPTDEPENDENCIES 
 .RELEASENOTES
 Script should be executed in a Command Prompt using the following command
-powershell Invoke-Expression -Command (Invoke-RestMethod -Uri sandbox.michaeltheadmin.com)
+powershell Invoke-Expression -Command (Invoke-RestMethod -Uri sandbox.osdcloud.com)
 This is abbreviated as
-powershell iex (irm sandbox.michaeltheadmin.com)
+powershell iex (irm sandbox.osdcloud.com)
 #>
 #Requires -RunAsAdministrator
 <#
@@ -24,17 +24,16 @@ powershell iex (irm sandbox.michaeltheadmin.com)
 .DESCRIPTION
     PowerShell Script which supports the OSDCloud environment
 .NOTES
-    Version 25.9.10.0
+    Version 23.6.10.1
 .LINK
-    https://raw.githubusercontent.com/MichaelEscamilla/Powershell/refs/heads/main/OSDCloud/subdomains/sandbox.michaeltheadmin.com.ps1
+    https://raw.githubusercontent.com/OSDeploy/OSD/master/cloud/sandbox.osdcloud.com.ps1
 .EXAMPLE
-    powershell iex (irm sandbox.michaeltheadmin.com)
+    powershell iex (irm sandbox.osdcloud.com)
 #>
-
 [CmdletBinding()]
 param()
-$ScriptName = 'sandbox.michaeltheadmin.com'
-$ScriptVersion = '25.9.10.0'
+$ScriptName = 'sandbox.osdcloud.com'
+$ScriptVersion = '23.6.10.1'
 
 #region Initialize
 $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$ScriptName.log"
@@ -52,7 +51,7 @@ else {
 }
 
 Write-Host -ForegroundColor Green "[+] $ScriptName $ScriptVersion ($WindowsPhase Phase)"
-Invoke-Expression -Command (Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/MichaelEscamilla/Powershell/main/OSDCloud/Cloud/subdomains/functions.michaeltheadmin.com.ps1')
+Invoke-Expression -Command (Invoke-RestMethod -Uri functions.osdcloud.com)
 #endregion
 
 #region Admin Elevation
