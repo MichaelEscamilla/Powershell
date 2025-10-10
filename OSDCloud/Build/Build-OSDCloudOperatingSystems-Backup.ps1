@@ -96,7 +96,8 @@ function Invoke-ExpandCAB {
 $ESDInfo = @()
 
 # Download the CAB Files and Extract the ESD Information
-ForEach ($Option in $WindowsTable) {    # Check if URL is empty and copy FilePath to Staging Folder
+ForEach ($Option in $WindowsTable) {
+    # Check if URL is empty and copy FilePath to Staging Folder
     if ($Option.URL -eq "") {
         Copy-Item -Path $Option.FilePath -Destination "$StagingFolder\$($Option.LocalCab)" -Force
         Write-Verbose "Copied CAB File from [$($Option.FilePath)] to [$StagingFolder\$($Option.LocalCab)]"
@@ -118,17 +119,6 @@ ForEach ($Option in $WindowsTable) {    # Check if URL is empty and copy FilePat
 
 # Remove Duplicates (Based on FileName) - Strips out most of the editions already
 $UniqueESDInfo = $ESDInfo | Group-Object -Property FileName | ForEach-Object { $_.Group | Select-Object -First 1 }
-
-# Combined ESDs
-$CombinedESDInfo = $UniqueESDInfo | Where-Object { $_.Architecture -eq "x64" -or $_.Architecture -eq "ARM64" }
-# Only include the following Editions if they exist
-$CombinedESDInfo = $CombinedESDInfo | Where-Object {
-    $_.Edition -eq "Professional" -or
-    $_.Edition -eq "Education" -or
-    $_.Edition -eq "Enterprise" -or
-    $_.Edition -eq "Professional" -or
-    $_.Edition -eq "HomePremium"
-}
 
 # x64 ESDs
 $x64ESDInfo = $UniqueESDInfo | Where-Object { $_.Architecture -eq "x64" }
@@ -153,95 +143,6 @@ $ARM64ESDInfo = $ARM64ESDInfo | Where-Object {
 }
 
 #=================================================
-#   Media Creation Tool - Combined
-#=================================================
-$CombinedResults = $CombinedESDInfo
-$CombinedResults = $CombinedResults | Select-Object @(
-    @{Name = 'Status'; Expression = { ($null) } }
-    @{Name = 'ReleaseDate'; Expression = { ($null) } }
-    @{Name = 'Name'; Expression = { ($_.Title) } }
-    @{Name = 'Version'; Expression = { ($null) } }
-    @{Name = 'ReleaseID'; Expression = { ($_.null) } }
-    @{Name = 'Architecture'; Expression = { ($_.Architecture) } }
-    @{Name = 'Language'; Expression = { ($_.LanguageCode) } }
-    @{Name = 'Activation'; Expression = { ($null) } }
-    @{Name = 'Build'; Expression = { ($null) } }
-    @{Name = 'FileName'; Expression = { ($_.FileName) } }
-    @{Name = 'ImageIndex'; Expression = { ($null) } }
-    @{Name = 'ImageName'; Expression = { ($null) } }
-    @{Name = 'Url'; Expression = { ($_.FilePath) } }
-    @{Name = 'SHA1'; Expression = { ($_.Sha1) } }
-    @{Name = 'UpdateID'; Expression = { ($_.UpdateID) } }
-    @{Name = 'Win10'; Expression = { ($null) } }
-    @{Name = 'Win11'; Expression = { ($null) } }
-)
-
-foreach ($Result in $CombinedResults) {
-    #=================================================
-    #   Activation
-    #   URL (Or Filename?) will contain 'Business' for Volume
-    #=================================================
-    if ($Result.Url -match 'Business') {
-        $Result.Activation = 'Volume'
-    }
-    else {
-        $Result.Activation = 'Retail'
-    }
-
-    #=================================================
-    #   Build
-    #   Extract the Build Number from the FileName
-    #=================================================
-    # Match all numbers separated by a period
-    $Regex = "[0-9]*\.[0-9]+"
-    # Take the first match found
-    $Result.Build = ($Result.FileName | Select-String -AllMatches -Pattern $Regex).Matches[0].Value
-
-    #=================================================
-    #   OS Version
-    #=================================================
-    if ($Result.Build -lt 22000) {
-        $Result.Version = 'Windows 10'
-        $Result.Win10 = $true
-        $Result.Win11 = $false
-    }
-    if ($Result.Build -ge 22000) {
-        $Result.Version = 'Windows 11'
-        $Result.Win10 = $false
-        $Result.Win11 = $true
-    }
-
-    #=================================================
-    #   ReleaseID
-    #=================================================
-    if ($Result.Build -match "19045") { $Result.ReleaseID = "22H2" }
-    if ($Result.Build -match "22000") { $Result.ReleaseID = "21H2" }
-    if ($Result.Build -match "22621") { $Result.ReleaseID = "22H2" }
-    if ($Result.Build -match "22631") { $Result.ReleaseID = "23H2" }
-    if ($Result.Build -match "26100") { $Result.ReleaseID = "24H2" }
-    if ($Result.Build -match "26200") { $Result.ReleaseID = "25H2" }
-
-    #=================================================
-    #   Date
-    #   Extract the Release Date from the FileName
-    #=================================================
-    # Data is the set of numbers after the second period and before the hyphen
-    $DateString = (($Result.FileName).Split(".")[2]).Split("-")[0]
-    # Convert the Date String to a Date Object
-    $Date = [datetime]::ParseExact($DateString, 'yyMMdd', $null)
-    # Reformat
-    $Result.ReleaseDate = (Get-Date $Date -Format "yyyy-MM-dd")
-
-    #=================================================
-    #   Name 
-    #=================================================
-    $Result.Name = $Result.Version + ' ' + $Result.ReleaseID + ' x64 ' + $Result.Language + ' ' + $Result.Activation + ' ' + $Result.Build
-}
-
-#$CombinedResults = $CombinedResults | Sort-Object -Property Language, Activation
-$CombinedResults = $CombinedResults | Sort-Object -Property Name 
-#$CombinedResults = $CombinedResults | Sort-Object -Property @{ Expression = "Name"; Ascending = $true; Descending = $false }, @{ Expression = "Architecture"; Ascending = $false; Descending = $true}
-    #=================================================
 #   Media Creation Tool - x64
 #=================================================
 $Results = $x64ESDInfo
@@ -524,7 +425,7 @@ $CatalogExportPath = "$StagingFolder"
 
 # x64 Catalog File
 $ResultsTotal += $ResultsMCTx64
-#$ResultsTotal += $ResultsWSUS
+$ResultsTotal += $ResultsWSUS
 # Export XML
 $ResultsTotal | Export-Clixml -Path "$CatalogExportPath\CloudOperatingSystems.xml" -Force
 # Export JSON - Import the previously created XML file, convert it to JSON, and save the file
@@ -535,16 +436,6 @@ Import-Clixml -Path "$CatalogExportPath\CloudOperatingSystems.xml" | ConvertTo-J
 $ResultsMCTARM | Export-Clixml -Path "$CatalogExportPath\CloudOperatingSystemsARM64.xml" -Force
 # Export JSON - Import the previously created XML file, convert it to JSON, and save the file
 Import-Clixml -Path "$CatalogExportPath\CloudOperatingSystemsARM64.xml" | ConvertTo-Json | Out-File -FilePath "$CatalogExportPath\CloudOperatingSystemsARM64.json" -Encoding ascii -Width 2000 -Force
-
- 
-# Combined Catalog File
-$ResultsTotalCombined += $CombinedResults
-# Export XML
-$ResultsTotalCombined | Export-Clixml -Path "$CatalogExportPath\CloudOperatingSystems.xml" -Force
-# Export JSON - Import the previously created XML file, convert it to JSON, and save the file
-Import-Clixml -Path "$CatalogExportPath\CloudOperatingSystems.xml" | ConvertTo-Json | Out-File -FilePath "$CatalogExportPath\CloudOperatingSystems.json" -Encoding ascii -Width 2000 -Force
-#>
-
 
 # Clear All Variables
 $Results = $null
